@@ -1,29 +1,29 @@
-import { State } from "../../types";
-import { INITIAL_STATE } from "../constants";
-import { Controller } from "../types";
+import { State } from "../../types"
+import { INITIAL_STATE } from "../constants"
+import { Controller } from "../types"
 
 export class AmbientLightController implements Controller {
-  state: State;
-  sensor: AmbientLightSensor;
+  state: State
+  sensor: AmbientLightSensor
 
   constructor() {
     this.state = INITIAL_STATE
-    this.sensor = new AmbientLightSensor();
+    this.sensor = new AmbientLightSensor()
 
     window.addEventListener("touchstart", () => {
-      this.state.isPaused = !this.state.isPaused;
+      this.state.isPaused = !this.state.isPaused
 
-      this.onUpdate(this.state);
-    });
+      this.onUpdate(this.state)
+    })
 
     this.sensor.addEventListener("reading", () => {
-      document.body.innerHTML = `illuminance: ${this.sensor.illuminance}`;
+      document.body.innerHTML = `illuminance: ${this.sensor.illuminance}`
 
-      this.onUpdate(this.state);
-    });
+      this.onUpdate(this.state)
+    })
 
-    this.sensor.start();
+    this.sensor.start()
   }
 
-  onUpdate: (state: State) => void;
+  onUpdate: (state: State) => void
 }

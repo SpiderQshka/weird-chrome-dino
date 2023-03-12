@@ -1,15 +1,15 @@
 export interface State {
-  isPaused: boolean;
+  isPaused: boolean
   player: {
-    isJumping: boolean;
-    isLaying: boolean;
-  };
+    isJumping: boolean
+    isLaying: boolean
+  }
 }
 
 export interface ServerToClientEvents {
-  "state:updated": (state: State) => void;
+  "state:updated": (state: State) => void
 }
 
 export interface ClientToServerEvents {
-  "state:update": (state: State) => void;
+  "state:update": (state: State) => void
 }

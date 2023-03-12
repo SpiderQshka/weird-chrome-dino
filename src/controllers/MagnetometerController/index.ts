@@ -1,1 +1,1 @@
-export * from "./MagnetometerController";
+export * from "./MagnetometerController"

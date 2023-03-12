@@ -1,1 +1,1 @@
-export * from "./SpeechController";
+export * from "./SpeechController"

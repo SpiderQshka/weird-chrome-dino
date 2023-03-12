@@ -3,7 +3,13 @@
     "@types/dom-speech-recognition": "^0.0.1",
     "@types/lodash": "^4.14.191",
     "@types/w3c-generic-sensor": "^1.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "@typescript-eslint/parser": "^5.54.1",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "html-webpack-plugin": "^5.5.0",
+    "prettier": "^2.8.4",
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.5",
     "webpack": "^5.75.0",
@@ -18,6 +24,7 @@
     "serve:be": "node ./server.js",
     "watch:fe": "webpack --watch",
     "build:fe": "webpack",
+    "lint": "eslint --quiet . --ext .js,.ts",
     "host": "ngrok http 3000 --host-header='localhost:3000'"
   },
   "dependencies": {
