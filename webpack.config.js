@@ -23,16 +23,16 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/assets/input.html",
-      filename: "input.html",
+      template: "./src/assets/controller.html",
+      filename: "controller.html",
       minify: {
         removeComments: true,
         collapseWhitespace: true,
       },
     }),
     new HtmlWebpackPlugin({
-      template: "./src/assets/output.html",
-      filename: "output.html",
+      template: "./src/assets/presenter.html",
+      filename: "presenter.html",
       minify: {
         removeComments: true,
         collapseWhitespace: true,

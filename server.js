@@ -9,12 +9,12 @@ const app = express()
 
 app.use(express.static(path.join(__dirname, "dist")))
 
-app.get("/input", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist/input.html"))
+app.get("/controller", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist/controller.html"))
 })
 
-app.get("/output", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist/output.html"))
+app.get("/presenter", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist/presenter.html"))
 })
 
 const httpServer = createServer(app)
@@ -26,11 +26,7 @@ const io = new Server(httpServer, {
 })
 
 io.on("connection", socket => {
-  const handleStateUpdate = state => {
-    socket.broadcast.emit("state:updated", state)
-  }
-
-  socket.on("state:update", handleStateUpdate)
+  socket.on("state:update", state => socket.broadcast.emit("state:updated", state))
 })
 
 httpServer.listen(port)

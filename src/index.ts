@@ -5,21 +5,14 @@ import { AmbientLightController } from "./controllers"
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io()
 
-const { pageType } = document.body.dataset
+switch (document.body.dataset.pageType) {
+  case "controller":
+    const controller = new AmbientLightController()
 
-socket.on("connect", () => {
-  console.log("Connected!")
-})
+    controller.onUpdate = (state: State) => socket.emit("state:update", state)
+  case "presenter":
+    const game = new Game("game")
+    game.start()
 
-if (pageType === "input") {
-  const controller = new AmbientLightController()
-  controller.onUpdate = (state: State) => socket.emit("state:update", state)
-}
-
-if (pageType === "output") {
-  const game = new Game("game")
-
-  game.start()
-
-  socket.on("state:updated", state => game.updateState(state))
+    socket.on("state:updated", state => game.updateState(state))
 }
