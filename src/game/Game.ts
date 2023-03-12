@@ -1,4 +1,3 @@
-import { InputPlugin } from "../controllers/types"
 import { Score } from "./Score"
 import { Obstacle } from "./Obstacle"
 import { Player } from "./Player"
@@ -13,7 +12,6 @@ export class Game {
   obstacles: Obstacle[]
   gameSpeed: number
   isPaused: boolean
-  inputPlugin: InputPlugin
 
   spawnTimer: number
 

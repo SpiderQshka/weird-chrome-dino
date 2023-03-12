@@ -17,7 +17,11 @@ export class AmbientLightController implements Controller {
     })
 
     this.sensor.addEventListener("reading", () => {
-      document.body.innerHTML = `illuminance: ${this.sensor.illuminance}`
+      const { illuminance } = this.sensor
+
+      // Add calibration logic
+      this.state.player.isJumping = illuminance < 200
+      this.state.player.isLaying = illuminance > 800
 
       this.onUpdate(this.state)
     })

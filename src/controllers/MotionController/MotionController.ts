@@ -18,6 +18,17 @@ export class MotionController implements Controller {
     })
 
     this.sensor.addEventListener("reading", () => {
+      this.state.player.isJumping = !this.state.player.isLaying && this.sensor.z > 1
+
+      if (this.sensor.z < -1) {
+        this.state.player.isLaying = true
+
+        setTimeout(() => {
+          this.state.player.isLaying = false
+          this.onUpdate(this.state)
+        }, 1000)
+      }
+
       this.onUpdate(this.state)
     })
 
