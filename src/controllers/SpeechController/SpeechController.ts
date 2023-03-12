@@ -11,7 +11,7 @@ export class SpeechController implements Controller {
 
     this.speechRecognition = new webkitSpeechRecognition()
 
-    this.speechRecognition.continuous = true
+    this.speechRecognition.continuous = false
     this.speechRecognition.lang = "en-US"
     this.speechRecognition.interimResults = false
     this.speechRecognition.maxAlternatives = 20
@@ -36,9 +36,26 @@ export class SpeechController implements Controller {
         this.state.player.isJumping = true
         this.state.player.isLaying = false
 
-        setTimeout(() => (this.state.player.isJumping = false), 100)
+        setTimeout(() => {
+          this.state.player.isJumping = false
+          this.onUpdate(this.state)
+        })
       }
+
+      this.onUpdate(this.state)
     }
+
+    this.speechRecognition.onend = () => {
+      setTimeout(() => {
+        this.speechRecognition.start()
+      }, 100)
+    }
+
+    window.addEventListener("touchstart", () => {
+      this.state.isPaused = !this.state.isPaused
+
+      this.onUpdate(this.state)
+    })
 
     this.speechRecognition.start()
   }

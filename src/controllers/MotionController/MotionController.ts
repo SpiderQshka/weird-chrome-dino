@@ -8,8 +8,7 @@ export class MotionController implements Controller {
 
   constructor() {
     this.state = INITIAL_STATE
-
-    this.sensor = new LinearAccelerationSensor()
+    this.sensor = new LinearAccelerationSensor({ frequency: 60 })
 
     window.addEventListener("touchstart", () => {
       this.state.isPaused = !this.state.isPaused
@@ -18,9 +17,11 @@ export class MotionController implements Controller {
     })
 
     this.sensor.addEventListener("reading", () => {
-      this.state.player.isJumping = !this.state.player.isLaying && this.sensor.z > 1
+      if (this.state.isPaused) return
 
-      if (this.sensor.z < -1) {
+      this.state.player.isJumping = this.sensor.x > 15
+
+      if (this.sensor.x < -10) {
         this.state.player.isLaying = true
 
         setTimeout(() => {

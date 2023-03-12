@@ -9,8 +9,7 @@ export class MagnetometerController implements Controller {
 
   constructor() {
     this.state = INITIAL_STATE
-    this.sensor = new Magnetometer()
-    this.initialSensorState = null
+    this.sensor = new Magnetometer({ frequency: 30 })
 
     window.addEventListener("touchstart", () => {
       this.state.isPaused = !this.state.isPaused
@@ -19,21 +18,14 @@ export class MagnetometerController implements Controller {
     })
 
     this.sensor.addEventListener("reading", () => {
-      if (!this.initialSensorState)
-        setTimeout(
-          () =>
-            (this.initialSensorState = {
-              x: this.sensor.x,
-              y: this.sensor.y,
-              z: this.sensor.z,
-            }),
-          500,
-        )
+      if (this.sensor.y < -200 || this.sensor.y > 200) return
+
+      if (!this.initialSensorState) this.initialSensorState = { x: this.sensor.x, y: this.sensor.y, z: this.sensor.z }
 
       const deltaY = this.initialSensorState.y - this.sensor.y
 
-      this.state.player.isJumping = deltaY > 20
-      this.state.player.isLaying = deltaY < -5
+      this.state.player.isJumping = deltaY > 10
+      this.state.player.isLaying = deltaY < -10
 
       this.onUpdate(this.state)
     })
