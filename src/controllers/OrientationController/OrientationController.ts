@@ -1,36 +1,31 @@
-import { isNull } from "lodash";
 import { State } from "../../types";
-import { InputPlugin } from "../types";
+import { INITIAL_STATE } from "../constants";
+import { Controller } from "../types";
 
-export class OrientationPlugin implements InputPlugin {
+export class OrientationController implements Controller {
   state: State;
   initialSensorState: { alpha: number; beta: number; gamma: number };
 
   constructor() {
-    this.state = {
-      isPaused: false,
-      player: { isJumping: false, isLaying: false },
-    };
+    this.state = INITIAL_STATE
 
-    this.initialSensorState = null;
-  }
-
-  initialize(onChange: (state: State) => void) {
     window.addEventListener("deviceorientation", (e) => {
-      if (isNull(this.initialSensorState)) this.initialSensorState = e;
+      if (!this.initialSensorState) this.initialSensorState = e;
 
       const deltaGamma = this.initialSensorState.gamma - e.gamma;
 
       this.state.player.isJumping = deltaGamma > 10;
       this.state.player.isLaying = deltaGamma < -5;
 
-      onChange(this.state);
+      this.onUpdate(this.state);
     });
 
     window.addEventListener("touchstart", () => {
       this.state.isPaused = !this.state.isPaused;
 
-      onChange(this.state);
+      this.onUpdate(this.state);
     });
   }
+
+  onUpdate: (state: State) => void;
 }

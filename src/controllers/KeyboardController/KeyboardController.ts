@@ -1,21 +1,17 @@
 import { State } from "../../types";
-import { InputPlugin } from "../types";
+import { INITIAL_STATE } from "../constants";
+import { Controller } from "../types";
 
 const JUMP_KEY_CODES = ["Space"];
 const LAY_KEY_CODES = ["ShiftLeft"];
 const PAUSE_KEY_CODES = ["Enter"];
 
-export class KeyboardPlugin implements InputPlugin {
+export class KeyboardController implements Controller {
   state: State;
 
   constructor() {
-    this.state = {
-      isPaused: false,
-      player: { isJumping: false, isLaying: false },
-    };
-  }
+    this.state = INITIAL_STATE;
 
-  initialize(onChange: (state: State) => void) {
     document.addEventListener("keydown", ({ code }) => {
       if (JUMP_KEY_CODES.includes(code)) {
         this.state.player.isJumping = true;
@@ -29,7 +25,7 @@ export class KeyboardPlugin implements InputPlugin {
         this.state.isPaused = !this.state.isPaused;
       }
 
-      onChange(this.state);
+      this.onUpdate(this.state);
     });
 
     document.addEventListener("keyup", ({ code }) => {
@@ -41,7 +37,9 @@ export class KeyboardPlugin implements InputPlugin {
         this.state.player.isLaying = false;
       }
 
-      onChange(this.state);
+      this.onUpdate(this.state);
     });
   }
+
+  onUpdate: (state: State) => void;
 }

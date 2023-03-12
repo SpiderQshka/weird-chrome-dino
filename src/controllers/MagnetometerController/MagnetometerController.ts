@@ -1,29 +1,25 @@
-import { isNull } from "lodash";
 import { State } from "../../types";
-import { InputPlugin } from "../types";
+import { INITIAL_STATE } from "../constants";
+import { Controller } from "../types";
 
-export class MagnetometerPlugin implements InputPlugin {
+export class MagnetometerController implements Controller {
   state: State;
   sensor: Magnetometer;
   initialSensorState: { x: number; y: number; z: number };
 
   constructor() {
-    this.state = {
-      isPaused: false,
-      player: { isJumping: false, isLaying: false },
-    };
-
+    this.state = INITIAL_STATE;
     this.sensor = new Magnetometer();
     this.initialSensorState = null;
-  }
 
-  initialize() {
     window.addEventListener("touchstart", () => {
       this.state.isPaused = !this.state.isPaused;
+
+      this.onUpdate(this.state);
     });
 
     this.sensor.addEventListener("reading", () => {
-      if (isNull(this.initialSensorState))
+      if (!this.initialSensorState)
         setTimeout(
           () =>
             (this.initialSensorState = {
@@ -38,8 +34,12 @@ export class MagnetometerPlugin implements InputPlugin {
 
       this.state.player.isJumping = deltaY > 20;
       this.state.player.isLaying = deltaY < -5;
+
+      this.onUpdate(this.state);
     });
 
     this.sensor.start();
   }
+
+  onUpdate: (state: State) => void;
 }

@@ -1,15 +1,13 @@
 import { State } from "../../types";
-import { InputPlugin } from "../types";
+import { INITIAL_STATE } from "../constants";
+import { Controller } from "../types";
 
-export class SpeechPlugin implements InputPlugin {
+export class SpeechController implements Controller {
   state: State;
   speechRecognition: SpeechRecognition;
 
   constructor() {
-    this.state = {
-      isPaused: false,
-      player: { isJumping: false, isLaying: false },
-    };
+    this.state = INITIAL_STATE;
 
     this.speechRecognition = new webkitSpeechRecognition();
 
@@ -17,9 +15,7 @@ export class SpeechPlugin implements InputPlugin {
     this.speechRecognition.lang = "en-US";
     this.speechRecognition.interimResults = false;
     this.speechRecognition.maxAlternatives = 20;
-  }
 
-  initialize(onChange: (state: State) => void) {
     this.speechRecognition.onresult = (e) => {
       const lastSpeechRecognitionResult = e.results.item(e.resultIndex);
       const transcripts = [];
@@ -48,4 +44,6 @@ export class SpeechPlugin implements InputPlugin {
 
     this.speechRecognition.start();
   }
+
+  onUpdate: (state: State) => void;
 }

@@ -1,4 +1,4 @@
-import { InputPlugin } from "../inputPlugins/types";
+import { InputPlugin } from "../controllers/types";
 import { Score } from "./Score";
 import { Obstacle } from "./Obstacle";
 import { Player } from "./Player";

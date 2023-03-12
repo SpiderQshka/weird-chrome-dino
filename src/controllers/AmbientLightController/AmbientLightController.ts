@@ -1,32 +1,29 @@
 import { State } from "../../types";
-import { InputPlugin } from "../types";
+import { INITIAL_STATE } from "../constants";
+import { Controller } from "../types";
 
-export class AmbientLightPlugin implements InputPlugin {
+export class AmbientLightController implements Controller {
   state: State;
   sensor: AmbientLightSensor;
 
   constructor() {
-    this.state = {
-      isPaused: false,
-      player: { isJumping: false, isLaying: false },
-    };
-
+    this.state = INITIAL_STATE
     this.sensor = new AmbientLightSensor();
-  }
 
-  initialize(onChange: (state: State) => void) {
     window.addEventListener("touchstart", () => {
       this.state.isPaused = !this.state.isPaused;
 
-      onChange(this.state);
+      this.onUpdate(this.state);
     });
 
     this.sensor.addEventListener("reading", () => {
       document.body.innerHTML = `illuminance: ${this.sensor.illuminance}`;
 
-      onChange(this.state);
+      this.onUpdate(this.state);
     });
 
     this.sensor.start();
   }
+
+  onUpdate: (state: State) => void;
 }

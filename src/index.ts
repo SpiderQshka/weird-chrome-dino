@@ -1,7 +1,7 @@
 import { io, Socket } from "socket.io-client";
 import { ClientToServerEvents, State, ServerToClientEvents } from "./types";
 import { Game } from "./game";
-import { MotionPlugin } from "./inputPlugins";
+import { AmbientLightController } from "./controllers";
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 
@@ -12,11 +12,8 @@ socket.on("connect", () => {
 });
 
 if (pageType === "input") {
-  const handleChange = (state: State) => socket.emit("state:update", state);
-
-  const inputPlugin = new MotionPlugin();
-
-  inputPlugin.initialize(handleChange);
+  const controller = new AmbientLightController();
+  controller.onUpdate = (state: State) => socket.emit("state:update", state);
 }
 
 if (pageType === "output") {
