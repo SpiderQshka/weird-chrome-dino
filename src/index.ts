@@ -1,21 +1,19 @@
 import { io, Socket } from "socket.io-client"
 
 import { Game } from "./entities"
-import { KeyboardController } from "./controllers"
+import { OrientationController } from "./controllers"
 import { ClientToServerEvents, ServerToClientEvents } from "./types"
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io()
 
-export const initializeController = () => {
-  const controller = new KeyboardController()
+switch (document.body.dataset.pageType) {
+  case "controller":
+    const controller = new OrientationController()
 
-  controller.onUpdate = state => socket.emit("state:update", state)
-}
+    controller.onUpdate = state => socket.emit("state:update", state)
+  case "presenter":
+    const game = new Game("game")
+    game.start()
 
-export const initializePresenter = () => {
-  const game = new Game("game")
-
-  game.start()
-
-  socket.on("state:updated", state => game.updateState(state))
+    socket.on("state:updated", state => game.updateState(state))
 }

@@ -19,13 +19,9 @@ export class AmbientLightController implements Controller {
     })
 
     this.sensor.addEventListener("reading", () => {
-      if (this.initialIlluminance === null) {
-        this.initialIlluminance = this.sensor.illuminance
-      }
+      if (this.initialIlluminance === null) this.initialIlluminance = this.sensor.illuminance
 
       const deltaIlluminance = this.initialIlluminance - this.sensor.illuminance
-
-      document.body.innerHTML = `illuminance: ${this.sensor.illuminance} <br />initialIlluminance: ${this.initialIlluminance}`
 
       this.state.player.isJumping = deltaIlluminance <= -100
       this.state.player.isLaying = deltaIlluminance >= 100
