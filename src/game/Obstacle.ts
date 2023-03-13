@@ -1,6 +1,6 @@
 import { Position, Size } from "./types"
 
-type TObstacleConfig = {
+type ObstacleConfig = {
   position: Position
   size: Size
   gameSpeed: number
@@ -14,7 +14,7 @@ export class Obstacle {
 
   dx: number
 
-  constructor({ gameSpeed, position, size }: TObstacleConfig) {
+  constructor({ gameSpeed, position, size }: ObstacleConfig) {
     this.x = position.x
     this.y = position.y
     this.width = size.width
@@ -29,7 +29,7 @@ export class Obstacle {
 
   render(ctx: CanvasRenderingContext2D) {
     ctx.beginPath()
-    ctx.fillStyle = "#2484E4"
+    ctx.fillStyle = "#2b2d42"
     ctx.fillRect(this.x, this.y, this.width, this.height)
     ctx.closePath()
   }

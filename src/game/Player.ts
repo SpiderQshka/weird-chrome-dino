@@ -1,7 +1,7 @@
 import { Position, Size } from "./types"
 import { GRAVITY, JUMP_FORCE } from "./config"
 
-type TPlayerConfig = {
+type PlayerConfig = {
   position: Position
   size: Size
   canvasHeight: number
@@ -25,7 +25,7 @@ export class Player {
     isLaying: boolean
   }
 
-  constructor({ canvasHeight, position, size }: TPlayerConfig) {
+  constructor({ canvasHeight, position, size }: PlayerConfig) {
     this.x = position.x
     this.y = position.y
     this.width = size.width
@@ -77,7 +77,7 @@ export class Player {
 
   render(ctx: CanvasRenderingContext2D) {
     ctx.beginPath()
-    ctx.fillStyle = "#FF5858"
+    ctx.fillStyle = "#2b2d42"
     ctx.fillRect(this.x, this.y, this.width, this.height)
     ctx.closePath()
   }

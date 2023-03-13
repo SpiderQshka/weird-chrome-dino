@@ -18,7 +18,6 @@ export class Game {
   constructor(canvasId: string) {
     this.canvas = document.getElementById(canvasId) as HTMLCanvasElement
     this.ctx = this.canvas.getContext("2d")
-    this.ctx.font = "20px sans-serif"
 
     this.isPaused = false
 
@@ -27,12 +26,12 @@ export class Game {
 
     this.player = new Player({
       canvasHeight: this.canvas.height,
-      position: { x: 25, y: 0 },
-      size: { width: 50, height: 50 },
+      position: { x: 25, y: this.canvas.height },
+      size: { width: 100, height: 100 },
     })
 
     this.score = new Score({
-      position: { x: 25, y: 25 },
+      position: { x: 25, y: 50 },
     })
 
     this.obstacles = []
@@ -65,9 +64,9 @@ export class Game {
   update() {
     this.spawnTimer--
 
-    // Spawn obstacle if it's time to
+    // Spawn obstacle when it's time to
     if (this.spawnTimer <= 0) {
-      const size = { width: 25, height: 25 }
+      const size = { width: 50, height: 50 }
       const isFlying = Math.random() < 0.5
 
       const position = {

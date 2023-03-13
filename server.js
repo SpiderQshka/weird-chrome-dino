@@ -7,23 +7,23 @@ const port = process.env.PORT || 3000
 
 const app = express()
 
-app.use(express.static(path.join(__dirname, "dist")))
+app.use(express.static(path.join(__dirname, "build")))
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "build/index.html"))
+})
 
 app.get("/controller", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist/controller.html"))
+  res.sendFile(path.join(__dirname, "build/controller.html"))
 })
 
 app.get("/presenter", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist/presenter.html"))
+  res.sendFile(path.join(__dirname, "build/presenter.html"))
 })
 
 const httpServer = createServer(app)
 
-const io = new Server(httpServer, {
-  cors: {
-    origin: false,
-  },
-})
+const io = new Server(httpServer)
 
 io.on("connection", socket => {
   socket.on("state:update", state => socket.broadcast.emit("state:updated", state))

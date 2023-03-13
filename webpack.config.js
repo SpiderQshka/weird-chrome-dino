@@ -19,9 +19,17 @@ module.exports = {
   },
   output: {
     filename: "bundle.js",
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "build"),
   },
   plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/assets/index.html",
+      filename: "index.html",
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+      },
+    }),
     new HtmlWebpackPlugin({
       template: "./src/assets/controller.html",
       filename: "controller.html",
@@ -39,8 +47,4 @@ module.exports = {
       },
     }),
   ],
-  devServer: {
-    compress: true,
-    port: 8080,
-  },
 }

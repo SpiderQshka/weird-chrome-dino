@@ -1,6 +1,6 @@
 import { Position } from "./types"
 
-type TScoreConfig = {
+type ScoreConfig = {
   position: Position
 }
 
@@ -9,7 +9,7 @@ export class Score {
   x: number
   y: number
 
-  constructor({ position }: TScoreConfig) {
+  constructor({ position }: ScoreConfig) {
     this.score = 0
     this.x = position.x
     this.y = position.y
@@ -17,9 +17,9 @@ export class Score {
 
   render(ctx: CanvasRenderingContext2D) {
     ctx.beginPath()
-    ctx.fillStyle = "#212121"
-    ctx.font = "20px sans-serif"
-    ctx.fillText(`Score: ${this.score}`, this.x, this.y)
+    ctx.fillStyle = "#2b2d42"
+    ctx.font = "30px sans-serif"
+    ctx.fillText(`${this.score}`, this.x, this.y)
     ctx.closePath()
   }
 
