@@ -1,5 +1,5 @@
 import { Position, Size } from "./types"
-import { GRAVITY, JUMP_FORCE } from "./config"
+import { GRAVITY, JUMP_FORCE } from "../config"
 
 type PlayerConfig = {
   position: Position

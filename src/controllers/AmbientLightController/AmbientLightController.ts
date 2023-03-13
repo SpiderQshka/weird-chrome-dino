@@ -1,4 +1,3 @@
-import isNull from "lodash/isNull"
 import { State } from "../../types"
 import { INITIAL_STATE } from "../constants"
 import { Controller } from "../types"
@@ -20,7 +19,7 @@ export class AmbientLightController implements Controller {
     })
 
     this.sensor.addEventListener("reading", () => {
-      if (isNull(this.initialIlluminance)) {
+      if (this.initialIlluminance === null) {
         this.initialIlluminance = this.sensor.illuminance
       }
 
