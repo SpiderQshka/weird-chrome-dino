@@ -9,12 +9,11 @@ export class TextDetectionController implements Controller {
     this.state = INITIAL_STATE
 
     const video = document.createElement("video")
-    video.hidden = true
     video.autoplay = true
+    video.width = window.innerWidth
+    video.height = window.innerHeight
 
     const canvas = document.createElement("canvas")
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
     canvas.hidden = true
 
     const ctx = canvas.getContext("2d")
@@ -24,19 +23,44 @@ export class TextDetectionController implements Controller {
 
     const textDetector = new (window as any).TextDetector()
 
-    navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(stream => (video.srcObject = stream))
+    navigator.mediaDevices
+      .getUserMedia({
+        video: {
+          facingMode: {
+            exact: "environment",
+          },
+        },
+        audio: false,
+      })
+      .then(stream => (video.srcObject = stream))
 
     setInterval(async () => {
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
 
       const textBlocks = await textDetector.detect(canvas)
 
-      if (textBlocks.length < 0) return
+      if (textBlocks.length === 0) {
+        this.state.player.isJumping = false
+        this.state.player.isLaying = false
 
-      const texts = textBlocks.map(text => text.rawValue.toLowerCase())
+        this.onUpdate(this.state)
 
-      if (texts.map(text => text.rawValue.toLowerCase()).filter(word => word.includes("art"))) alert("Mama mia!")
-    }, 5000)
+        return
+      }
+
+      const texts = textBlocks.map(text => text.rawValue.toLowerCase()) as string[]
+
+      if (texts.some(word => word.includes("jump"))) this.state.player.isJumping = true
+      if (texts.some(word => word.includes("lay"))) this.state.player.isLaying = true
+
+      this.onUpdate(this.state)
+    }, 1000)
+
+    window.addEventListener("touchstart", () => {
+      this.state.isPaused = !this.state.isPaused
+
+      this.onUpdate(this.state)
+    })
   }
 
   onUpdate: (state: State) => void
