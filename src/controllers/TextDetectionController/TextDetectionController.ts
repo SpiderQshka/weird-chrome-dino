@@ -23,16 +23,15 @@ export class TextDetectionController implements Controller {
 
     const textDetector = new (window as any).TextDetector()
 
-    navigator.mediaDevices
-      .getUserMedia({
-        video: {
-          facingMode: {
-            exact: "environment",
-          },
+    const mediaStreamConstraints = {
+      video: {
+        facingMode: {
+          exact: "environment",
         },
-        audio: false,
-      })
-      .then(stream => (video.srcObject = stream))
+      },
+    }
+
+    navigator.mediaDevices.getUserMedia(mediaStreamConstraints).then(stream => (video.srcObject = stream))
 
     setInterval(async () => {
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height)

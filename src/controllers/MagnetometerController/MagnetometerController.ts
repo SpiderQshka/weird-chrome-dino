@@ -11,12 +11,6 @@ export class MagnetometerController implements Controller {
     this.state = INITIAL_STATE
     this.sensor = new Magnetometer({ frequency: 30 })
 
-    window.addEventListener("touchstart", () => {
-      this.state.isPaused = !this.state.isPaused
-
-      this.onUpdate(this.state)
-    })
-
     this.sensor.addEventListener("reading", () => {
       if (this.sensor.y < -200 || this.sensor.y > 200) return
 
@@ -26,6 +20,12 @@ export class MagnetometerController implements Controller {
 
       this.state.player.isJumping = deltaY > 10
       this.state.player.isLaying = deltaY < -10
+
+      this.onUpdate(this.state)
+    })
+
+    window.addEventListener("touchstart", () => {
+      this.state.isPaused = !this.state.isPaused
 
       this.onUpdate(this.state)
     })

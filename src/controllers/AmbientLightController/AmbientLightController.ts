@@ -12,12 +12,6 @@ export class AmbientLightController implements Controller {
     this.sensor = new AmbientLightSensor()
     this.initialIlluminance = null
 
-    window.addEventListener("touchstart", () => {
-      this.state.isPaused = !this.state.isPaused
-
-      this.onUpdate(this.state)
-    })
-
     this.sensor.addEventListener("reading", () => {
       if (this.initialIlluminance === null) this.initialIlluminance = this.sensor.illuminance
 
@@ -25,6 +19,12 @@ export class AmbientLightController implements Controller {
 
       this.state.player.isJumping = deltaIlluminance <= -100
       this.state.player.isLaying = deltaIlluminance >= 100
+
+      this.onUpdate(this.state)
+    })
+
+    window.addEventListener("touchstart", () => {
+      this.state.isPaused = !this.state.isPaused
 
       this.onUpdate(this.state)
     })

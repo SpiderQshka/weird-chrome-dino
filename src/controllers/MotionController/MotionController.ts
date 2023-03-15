@@ -10,12 +10,6 @@ export class MotionController implements Controller {
     this.state = INITIAL_STATE
     this.sensor = new LinearAccelerationSensor({ frequency: 60 })
 
-    window.addEventListener("touchstart", () => {
-      this.state.isPaused = !this.state.isPaused
-
-      this.onUpdate(this.state)
-    })
-
     this.sensor.addEventListener("reading", () => {
       if (this.state.isPaused) return
 
@@ -29,6 +23,12 @@ export class MotionController implements Controller {
           this.onUpdate(this.state)
         }, 1000)
       }
+
+      this.onUpdate(this.state)
+    })
+
+    window.addEventListener("touchstart", () => {
+      this.state.isPaused = !this.state.isPaused
 
       this.onUpdate(this.state)
     })
