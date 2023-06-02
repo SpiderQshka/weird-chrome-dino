@@ -1,4 +1,4 @@
-import { Position, Size } from "./types"
+import { Position, Size } from "../types"
 
 type ObstacleConfig = {
   position: Position

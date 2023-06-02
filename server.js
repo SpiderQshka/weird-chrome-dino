@@ -13,12 +13,12 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "build/index.html"))
 })
 
-app.get("/controller", (req, res) => {
-  res.sendFile(path.join(__dirname, "build/controller.html"))
+app.get("/input", (req, res) => {
+  res.sendFile(path.join(__dirname, "build/input.html"))
 })
 
-app.get("/presenter", (req, res) => {
-  res.sendFile(path.join(__dirname, "build/presenter.html"))
+app.get("/output", (req, res) => {
+  res.sendFile(path.join(__dirname, "build/output.html"))
 })
 
 const httpServer = createServer(app)

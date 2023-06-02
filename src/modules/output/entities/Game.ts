@@ -1,8 +1,8 @@
 import { Score } from "./Score"
 import { Obstacle } from "./Obstacle"
 import { Player } from "./Player"
-import { GAME_SPEED, GAME_SPEED_FACTOR, INITIAL_SPAWN_TIMER, MIN_SPAWN_TIMER } from "../config"
-import { State } from "../types"
+import { GAME_SPEED, GAME_SPEED_FACTOR, INITIAL_SPAWN_TIMER, MIN_SPAWN_TIMER } from "../constants"
+import { State } from "../../../types"
 
 export class Game {
   canvas: HTMLCanvasElement

@@ -2,7 +2,10 @@ const HtmlWebpackPlugin = require("html-webpack-plugin")
 const path = require("path")
 
 module.exports = {
-  entry: "./src/index.ts",
+  entry: {
+    input: "./src/modules/input/index.ts",
+    output: "./src/modules/output/index.ts",
+  },
   module: {
     rules: [
       {
@@ -16,13 +19,14 @@ module.exports = {
     extensions: [".ts"],
   },
   output: {
-    filename: "bundle.js",
+    filename: "[name].bundle.js",
     path: path.resolve(__dirname, "build"),
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/assets/index.html",
       filename: "index.html",
+      chunks: [],
+      template: "./src/assets/index.html",
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -30,8 +34,9 @@ module.exports = {
       },
     }),
     new HtmlWebpackPlugin({
-      template: "./src/assets/controller.html",
-      filename: "controller.html",
+      filename: "input.html",
+      template: "./src/assets/input.html",
+      chunks: ["input"],
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -39,8 +44,9 @@ module.exports = {
       },
     }),
     new HtmlWebpackPlugin({
-      template: "./src/assets/presenter.html",
-      filename: "presenter.html",
+      filename: "output.html",
+      template: "./src/assets/output.html",
+      chunks: ["output"],
       minify: {
         removeComments: true,
         collapseWhitespace: true,

@@ -1,6 +1,6 @@
-import { State } from "../../types"
-import { INITIAL_STATE } from "../constants"
-import { Controller } from "../types"
+import { State } from "../../../../types"
+import { INITIAL_STATE } from "../../constants"
+import { Controller } from "../../types"
 
 export class AmbientLightController implements Controller {
   state: State

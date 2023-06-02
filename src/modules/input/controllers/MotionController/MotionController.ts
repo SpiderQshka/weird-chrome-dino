@@ -1,6 +1,6 @@
-import { State } from "../../types"
-import { INITIAL_STATE } from "../constants"
-import { Controller } from "../types"
+import { State } from "../../../../types"
+import { INITIAL_STATE } from "../../constants"
+import { Controller } from "../../types"
 
 export class MotionController implements Controller {
   state: State
