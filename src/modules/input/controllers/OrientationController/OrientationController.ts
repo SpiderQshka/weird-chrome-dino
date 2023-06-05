@@ -6,10 +6,13 @@ export class OrientationController implements Controller {
   state: State
   initialSensorState: { alpha: number; beta: number; gamma: number }
 
+  handleDeviceOrientation: (e: DeviceOrientationEvent) => void
+  handleTouchStart: () => void
+
   constructor() {
     this.state = INITIAL_STATE
 
-    window.addEventListener("deviceorientation", e => {
+    this.handleDeviceOrientation = e => {
       if (!this.initialSensorState) this.initialSensorState = e
 
       const deltaGamma = this.initialSensorState.gamma - e.gamma
@@ -17,15 +20,25 @@ export class OrientationController implements Controller {
       this.state.player.isJumping = deltaGamma > 10
       this.state.player.isLaying = deltaGamma < -5
 
-      this.onUpdate(this.state)
-    })
+      this.onStateUpdate(this.state)
+    }
 
-    window.addEventListener("touchstart", () => {
+    this.handleTouchStart = () => {
       this.state.isPaused = !this.state.isPaused
 
-      this.onUpdate(this.state)
-    })
+      this.onStateUpdate(this.state)
+    }
   }
 
-  onUpdate: (state: State) => void
+  initialize() {
+    window.addEventListener("deviceorientation", this.handleDeviceOrientation)
+    window.addEventListener("touchstart", this.handleTouchStart)
+  }
+
+  cleanup() {
+    window.removeEventListener("deviceorientation", this.handleDeviceOrientation)
+    window.removeEventListener("touchstart", this.handleTouchStart)
+  }
+
+  onStateUpdate: (state: State) => void
 }

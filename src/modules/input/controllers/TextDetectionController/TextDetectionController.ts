@@ -5,23 +5,22 @@ import { Controller } from "../../types"
 export class TextDetectionController implements Controller {
   state: State
 
+  handleTouchStart: () => void
+
+  videoElement: HTMLVideoElement
+  canvasElement: HTMLCanvasElement
+  interval: ReturnType<typeof setInterval>
+
   constructor() {
     this.state = INITIAL_STATE
 
-    const video = document.createElement("video")
-    video.autoplay = true
-    video.width = window.innerWidth
-    video.height = window.innerHeight
+    this.videoElement = document.createElement("video")
+    this.videoElement.autoplay = true
+    this.videoElement.width = window.innerWidth
+    this.videoElement.height = window.innerHeight
 
-    const canvas = document.createElement("canvas")
-    canvas.hidden = true
-
-    const ctx = canvas.getContext("2d")
-
-    document.body.appendChild(video)
-    document.body.appendChild(canvas)
-
-    const textDetector = new (window as any).TextDetector()
+    this.canvasElement = document.createElement("canvas")
+    this.canvasElement.hidden = true
 
     const mediaStreamConstraints = {
       video: {
@@ -31,18 +30,32 @@ export class TextDetectionController implements Controller {
       },
     }
 
-    navigator.mediaDevices.getUserMedia(mediaStreamConstraints).then(stream => (video.srcObject = stream))
+    navigator.mediaDevices.getUserMedia(mediaStreamConstraints).then(stream => (this.videoElement.srcObject = stream))
 
-    setInterval(async () => {
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+    this.handleTouchStart = () => {
+      this.state.isPaused = !this.state.isPaused
 
-      const textBlocks = await textDetector.detect(canvas)
+      this.onStateUpdate(this.state)
+    }
+  }
+
+  initialize() {
+    document.body.appendChild(this.videoElement)
+    document.body.appendChild(this.canvasElement)
+
+    const ctx = this.canvasElement.getContext("2d")
+    const textDetector = new (window as any).TextDetector()
+
+    this.interval = setInterval(async () => {
+      ctx.drawImage(this.videoElement, 0, 0, this.canvasElement.width, this.canvasElement.height)
+
+      const textBlocks = await textDetector.detect(this.canvasElement)
 
       if (textBlocks.length === 0) {
         this.state.player.isJumping = false
         this.state.player.isLaying = false
 
-        this.onUpdate(this.state)
+        this.onStateUpdate(this.state)
 
         return
       }
@@ -52,15 +65,20 @@ export class TextDetectionController implements Controller {
       if (texts.some(word => word.includes("jump"))) this.state.player.isJumping = true
       if (texts.some(word => word.includes("lay"))) this.state.player.isLaying = true
 
-      this.onUpdate(this.state)
+      this.onStateUpdate(this.state)
     }, 1000)
 
-    window.addEventListener("touchstart", () => {
-      this.state.isPaused = !this.state.isPaused
-
-      this.onUpdate(this.state)
-    })
+    document.addEventListener("touchstart", this.handleTouchStart)
   }
 
-  onUpdate: (state: State) => void
+  cleanup() {
+    document.body.removeChild(this.videoElement)
+    document.body.removeChild(this.canvasElement)
+
+    clearInterval(this.interval)
+
+    document.removeEventListener("touchstart", this.handleTouchStart)
+  }
+
+  onStateUpdate: (state: State) => void
 }

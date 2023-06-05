@@ -9,10 +9,13 @@ const PAUSE_KEY_CODES = ["Enter"]
 export class KeyboardController implements Controller {
   state: State
 
+  handleKeyDown: (e: KeyboardEvent) => void
+  handleKeyUp: (e: KeyboardEvent) => void
+
   constructor() {
     this.state = INITIAL_STATE
 
-    document.addEventListener("keydown", ({ code }) => {
+    this.handleKeyDown = ({ code }) => {
       if (JUMP_KEY_CODES.includes(code)) {
         this.state.player.isJumping = true
       }
@@ -25,10 +28,10 @@ export class KeyboardController implements Controller {
         this.state.isPaused = !this.state.isPaused
       }
 
-      this.onUpdate(this.state)
-    })
+      this.onStateUpdate(this.state)
+    }
 
-    document.addEventListener("keyup", ({ code }) => {
+    this.handleKeyUp = ({ code }) => {
       if (JUMP_KEY_CODES.includes(code)) {
         this.state.player.isJumping = false
       }
@@ -37,9 +40,19 @@ export class KeyboardController implements Controller {
         this.state.player.isLaying = false
       }
 
-      this.onUpdate(this.state)
-    })
+      this.onStateUpdate(this.state)
+    }
   }
 
-  onUpdate: (state: State) => void
+  initialize() {
+    document.addEventListener("keydown", this.handleKeyDown)
+    document.addEventListener("keyup", this.handleKeyUp)
+  }
+
+  cleanup() {
+    document.removeEventListener("keydown", this.handleKeyDown)
+    document.removeEventListener("keyup", this.handleKeyUp)
+  }
+
+  onStateUpdate: (state: State) => void
 }

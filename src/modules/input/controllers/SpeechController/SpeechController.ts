@@ -6,6 +6,8 @@ export class SpeechController implements Controller {
   state: State
   speechRecognition: SpeechRecognition
 
+  handleTouchStart: () => void
+
   constructor() {
     this.state = INITIAL_STATE
 
@@ -38,11 +40,11 @@ export class SpeechController implements Controller {
 
         setTimeout(() => {
           this.state.player.isJumping = false
-          this.onUpdate(this.state)
+          this.onStateUpdate(this.state)
         })
       }
 
-      this.onUpdate(this.state)
+      this.onStateUpdate(this.state)
     }
 
     this.speechRecognition.onend = () => {
@@ -51,14 +53,22 @@ export class SpeechController implements Controller {
       }, 100)
     }
 
-    window.addEventListener("touchstart", () => {
+    this.handleTouchStart = () => {
       this.state.isPaused = !this.state.isPaused
 
-      this.onUpdate(this.state)
-    })
+      this.onStateUpdate(this.state)
+    }
+  }
 
+  initialize() {
+    document.addEventListener("touchstart", this.handleTouchStart)
     this.speechRecognition.start()
   }
 
-  onUpdate: (state: State) => void
+  cleanup() {
+    document.removeEventListener("touchstart", this.handleTouchStart)
+    this.speechRecognition.stop()
+  }
+
+  onStateUpdate: (state: State) => void
 }

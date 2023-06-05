@@ -1,10 +1,27 @@
 import { io, Socket } from "socket.io-client"
 
-import { TextDetectionController } from "./controllers"
+import {
+  AmbientLightController,
+  KeyboardController,
+  MagnetometerController,
+  MotionController,
+  OrientationController,
+  SpeechController,
+  TextDetectionController,
+} from "./controllers"
 import { ClientToServerEvents, ServerToClientEvents } from "../../types"
+import { initializeControllersSelect } from "./helpers"
+
+const controllers = {
+  AmbientLightController,
+  KeyboardController,
+  MagnetometerController,
+  MotionController,
+  OrientationController,
+  SpeechController,
+  TextDetectionController,
+}
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io()
 
-const controller = new TextDetectionController()
-
-controller.onUpdate = state => socket.emit("state:update", state)
+initializeControllersSelect(controllers, state => socket.emit("state:update", state))

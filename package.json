@@ -20,10 +20,9 @@
   "license": "MIT",
   "scripts": {
     "server": "node ./server.js",
-    "client:watch": "webpack --watch --mode development",
-    "client:build": "webpack --mode production",
-    "lint": "eslint --quiet . --ext .js,.ts",
-    "host": "ngrok http 3000 --host-header='localhost:3000'"
+    "watch": "webpack --watch --mode development",
+    "build": "webpack --mode production",
+    "lint": "eslint --quiet ./src --ext .js,.ts"
   },
   "dependencies": {
     "express": "4.18.2",
