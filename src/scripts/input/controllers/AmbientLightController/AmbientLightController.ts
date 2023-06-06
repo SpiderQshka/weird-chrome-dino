@@ -1,19 +1,23 @@
 import { State } from "@root/scripts/types"
 import { INITIAL_STATE } from "@root/scripts/constants"
 import { Controller } from "../types"
+import { createPauseButton } from "../../helpers"
 
 export class AmbientLightController implements Controller {
   state: State
   sensor: AmbientLightSensor
   initialIlluminance: number
+  pauseButton: HTMLButtonElement
 
   handleSensorRead: () => void
-  handleTouchStart: () => void
+  handlePauseButtonClick: () => void
 
   constructor() {
     this.state = INITIAL_STATE
     this.sensor = new AmbientLightSensor()
     this.initialIlluminance = null
+
+    this.pauseButton = document.querySelector("button")
 
     this.handleSensorRead = () => {
       if (this.initialIlluminance === null) this.initialIlluminance = this.sensor.illuminance
@@ -26,7 +30,7 @@ export class AmbientLightController implements Controller {
       this.onStateUpdate(this.state)
     }
 
-    this.handleTouchStart = () => {
+    this.handlePauseButtonClick = () => {
       this.state.isGamePaused = !this.state.isGamePaused
 
       this.onStateUpdate(this.state)
@@ -35,14 +39,14 @@ export class AmbientLightController implements Controller {
 
   initialize() {
     this.sensor.addEventListener("reading", this.handleSensorRead)
-    document.addEventListener("touchstart", this.handleTouchStart)
+    this.pauseButton.addEventListener("click", this.handlePauseButtonClick)
 
     this.sensor.start()
   }
 
   cleanup() {
     this.sensor.removeEventListener("reading", this.handleSensorRead)
-    document.removeEventListener("touchstart", this.handleTouchStart)
+    this.pauseButton.removeEventListener("click", this.handlePauseButtonClick)
 
     this.sensor.stop()
   }

@@ -12,7 +12,7 @@ import {
   TextDetectionController,
 } from "./controllers"
 import { ClientToServerEvents, ServerToClientEvents } from "@root/scripts/types"
-import { initializeControllersSelect } from "./helpers"
+import { createPauseButton, initializeControllerSelect } from "./helpers"
 
 const controllers = {
   AmbientLightController,
@@ -26,4 +26,5 @@ const controllers = {
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io()
 
-initializeControllersSelect(controllers, state => socket.emit("state:update", state))
+initializeControllerSelect(controllers, state => socket.emit("state:update", state))
+createPauseButton()

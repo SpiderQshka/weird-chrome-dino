@@ -4,13 +4,16 @@ import { Controller } from "../types"
 
 export class OrientationController implements Controller {
   state: State
+  pauseButton: HTMLButtonElement
   initialSensorState: { alpha: number; beta: number; gamma: number }
 
   handleDeviceOrientation: (e: DeviceOrientationEvent) => void
-  handleTouchStart: () => void
+  handlePauseButtonClick: () => void
 
   constructor() {
     this.state = INITIAL_STATE
+
+    this.pauseButton = document.querySelector("button")
 
     this.handleDeviceOrientation = e => {
       if (!this.initialSensorState) this.initialSensorState = e
@@ -23,7 +26,7 @@ export class OrientationController implements Controller {
       this.onStateUpdate(this.state)
     }
 
-    this.handleTouchStart = () => {
+    this.handlePauseButtonClick = () => {
       this.state.isGamePaused = !this.state.isGamePaused
 
       this.onStateUpdate(this.state)
@@ -32,12 +35,12 @@ export class OrientationController implements Controller {
 
   initialize() {
     window.addEventListener("deviceorientation", this.handleDeviceOrientation)
-    window.addEventListener("touchstart", this.handleTouchStart)
+    this.pauseButton.addEventListener("click", this.handlePauseButtonClick)
   }
 
   cleanup() {
     window.removeEventListener("deviceorientation", this.handleDeviceOrientation)
-    window.removeEventListener("touchstart", this.handleTouchStart)
+    this.pauseButton.removeEventListener("click", this.handlePauseButtonClick)
   }
 
   onStateUpdate: (state: State) => void

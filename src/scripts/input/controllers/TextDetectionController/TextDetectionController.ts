@@ -5,7 +5,9 @@ import { Controller } from "../types"
 export class TextDetectionController implements Controller {
   state: State
 
-  handleTouchStart: () => void
+  handlePauseButtonClick: () => void
+
+  pauseButton: HTMLButtonElement
 
   videoElement: HTMLVideoElement
   canvasElement: HTMLCanvasElement
@@ -13,6 +15,8 @@ export class TextDetectionController implements Controller {
 
   constructor() {
     this.state = INITIAL_STATE
+
+    this.pauseButton = document.querySelector("button")
 
     this.videoElement = document.createElement("video")
     this.videoElement.autoplay = true
@@ -32,7 +36,7 @@ export class TextDetectionController implements Controller {
 
     navigator.mediaDevices.getUserMedia(mediaStreamConstraints).then(stream => (this.videoElement.srcObject = stream))
 
-    this.handleTouchStart = () => {
+    this.handlePauseButtonClick = () => {
       this.state.isGamePaused = !this.state.isGamePaused
 
       this.onStateUpdate(this.state)
@@ -68,7 +72,7 @@ export class TextDetectionController implements Controller {
       this.onStateUpdate(this.state)
     }, 1000)
 
-    document.addEventListener("touchstart", this.handleTouchStart)
+    this.pauseButton.addEventListener("click", this.handlePauseButtonClick)
   }
 
   cleanup() {
@@ -77,7 +81,7 @@ export class TextDetectionController implements Controller {
 
     clearInterval(this.interval)
 
-    document.removeEventListener("touchstart", this.handleTouchStart)
+    this.pauseButton.removeEventListener("click", this.handlePauseButtonClick)
   }
 
   onStateUpdate: (state: State) => void

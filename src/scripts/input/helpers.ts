@@ -1,11 +1,11 @@
 import { State } from "@root/scripts/types"
 import { Controller } from "./controllers/types"
 
-export function initializeControllersSelect(
+export function initializeControllerSelect(
   controllers: { [key: string]: new () => Controller },
   onStateUpdate: (state: State) => void,
 ) {
-  const select: HTMLSelectElement = document.createElement("select")
+  const select = document.createElement("select")
 
   const emptyOption = document.createElement("option")
 
@@ -41,4 +41,12 @@ export function initializeControllersSelect(
   }
 
   document.body.appendChild(select)
+}
+
+export function createPauseButton() {
+  const pauseButton = document.createElement("button")
+
+  pauseButton.innerText = "Pause / Continue"
+
+  document.body.appendChild(pauseButton)
 }
