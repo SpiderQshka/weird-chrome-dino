@@ -26,6 +26,14 @@ export class TextDetectionController implements Controller {
     this.canvasElement = document.createElement("canvas")
     this.canvasElement.hidden = true
 
+    this.handlePauseButtonClick = () => {
+      this.state.isGamePaused = !this.state.isGamePaused
+
+      this.onStateUpdate(this.state)
+    }
+  }
+
+  initialize() {
     const mediaStreamConstraints = {
       video: {
         facingMode: {
@@ -36,14 +44,6 @@ export class TextDetectionController implements Controller {
 
     navigator.mediaDevices.getUserMedia(mediaStreamConstraints).then(stream => (this.videoElement.srcObject = stream))
 
-    this.handlePauseButtonClick = () => {
-      this.state.isGamePaused = !this.state.isGamePaused
-
-      this.onStateUpdate(this.state)
-    }
-  }
-
-  initialize() {
     document.body.appendChild(this.videoElement)
     document.body.appendChild(this.canvasElement)
 
