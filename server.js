@@ -3,8 +3,6 @@ const { createServer } = require("http")
 const { Server } = require("socket.io")
 const path = require("path")
 
-const port = process.env.PORT || 3000
-
 const app = express()
 
 app.use(express.static(path.join(__dirname, "build")))
@@ -27,6 +25,7 @@ const io = new Server(httpServer)
 
 io.on("connection", socket => {
   socket.on("state:update", state => socket.broadcast.emit("state:updated", state))
+  socket.on("disconnecting", () => socket.broadcast.emit("state:resetted"))
 })
 
-httpServer.listen(port)
+httpServer.listen(3000)

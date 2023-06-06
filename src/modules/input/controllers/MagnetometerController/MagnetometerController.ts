@@ -1,5 +1,5 @@
 import { State } from "../../../../types"
-import { INITIAL_STATE } from "../../constants"
+import { INITIAL_STATE } from "../../../../constants"
 import { Controller } from "../../types"
 
 export class MagnetometerController implements Controller {
@@ -22,14 +22,14 @@ export class MagnetometerController implements Controller {
 
       const deltaY = this.initialSensorState.y - this.sensor.y
 
-      this.state.player.isJumping = deltaY > 10
-      this.state.player.isLaying = deltaY < -10
+      this.state.isJumping = deltaY > 10
+      this.state.isLaying = deltaY < -10
 
       this.onStateUpdate(this.state)
     }
 
     this.handleTouchStart = () => {
-      this.state.isPaused = !this.state.isPaused
+      this.state.isGamePaused = !this.state.isGamePaused
 
       this.onStateUpdate(this.state)
     }

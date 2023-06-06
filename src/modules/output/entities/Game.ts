@@ -11,15 +11,13 @@ export class Game {
   player: Player
   obstacles: Obstacle[]
   gameSpeed: number
-  isPaused: boolean
+  isGamePaused: boolean
 
   spawnTimer: number
 
-  constructor(canvasId: string) {
-    this.canvas = document.getElementById(canvasId) as HTMLCanvasElement
+  constructor() {
+    this.canvas = document.querySelector("canvas") as HTMLCanvasElement
     this.ctx = this.canvas.getContext("2d")
-
-    this.isPaused = false
 
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
@@ -51,7 +49,7 @@ export class Game {
   main() {
     requestAnimationFrame(() => this.main())
 
-    if (this.isPaused) return
+    if (this.isGamePaused) return
 
     this.update()
     this.render()
@@ -124,8 +122,8 @@ export class Game {
     this.score.render(this.ctx)
   }
 
-  updateState({ isPaused, player: { isJumping, isLaying } }: State) {
-    this.isPaused = isPaused
+  updateState({ isGamePaused, isJumping, isLaying }: State) {
+    this.isGamePaused = isGamePaused
     this.player.state = { isJumping, isLaying }
   }
 }

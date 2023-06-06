@@ -1,5 +1,5 @@
 import { State } from "../../../../types"
-import { INITIAL_STATE } from "../../constants"
+import { INITIAL_STATE } from "../../../../constants"
 import { Controller } from "../../types"
 
 export class SpeechController implements Controller {
@@ -27,19 +27,19 @@ export class SpeechController implements Controller {
       }
 
       if (transcripts.includes("stand up")) {
-        this.state.player.isLaying = false
+        this.state.isLaying = false
       }
 
       if (transcripts.includes("lay down")) {
-        this.state.player.isLaying = true
+        this.state.isLaying = true
       }
 
       if (transcripts.includes("jump over")) {
-        this.state.player.isJumping = true
-        this.state.player.isLaying = false
+        this.state.isJumping = true
+        this.state.isLaying = false
 
         setTimeout(() => {
-          this.state.player.isJumping = false
+          this.state.isJumping = false
           this.onStateUpdate(this.state)
         })
       }
@@ -54,7 +54,7 @@ export class SpeechController implements Controller {
     }
 
     this.handleTouchStart = () => {
-      this.state.isPaused = !this.state.isPaused
+      this.state.isGamePaused = !this.state.isGamePaused
 
       this.onStateUpdate(this.state)
     }

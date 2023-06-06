@@ -1,5 +1,5 @@
 import { State } from "../../../../types"
-import { INITIAL_STATE } from "../../constants"
+import { INITIAL_STATE } from "../../../../constants"
 import { Controller } from "../../types"
 
 const JUMP_KEY_CODES = ["Space"]
@@ -17,15 +17,15 @@ export class KeyboardController implements Controller {
 
     this.handleKeyDown = ({ code }) => {
       if (JUMP_KEY_CODES.includes(code)) {
-        this.state.player.isJumping = true
+        this.state.isJumping = true
       }
 
       if (LAY_KEY_CODES.includes(code)) {
-        this.state.player.isLaying = true
+        this.state.isLaying = true
       }
 
       if (PAUSE_KEY_CODES.includes(code)) {
-        this.state.isPaused = !this.state.isPaused
+        this.state.isGamePaused = !this.state.isGamePaused
       }
 
       this.onStateUpdate(this.state)
@@ -33,11 +33,11 @@ export class KeyboardController implements Controller {
 
     this.handleKeyUp = ({ code }) => {
       if (JUMP_KEY_CODES.includes(code)) {
-        this.state.player.isJumping = false
+        this.state.isJumping = false
       }
 
       if (LAY_KEY_CODES.includes(code)) {
-        this.state.player.isLaying = false
+        this.state.isLaying = false
       }
 
       this.onStateUpdate(this.state)

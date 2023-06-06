@@ -1,5 +1,5 @@
 import { State } from "../../../../types"
-import { INITIAL_STATE } from "../../constants"
+import { INITIAL_STATE } from "../../../../constants"
 import { Controller } from "../../types"
 
 export class OrientationController implements Controller {
@@ -17,14 +17,14 @@ export class OrientationController implements Controller {
 
       const deltaGamma = this.initialSensorState.gamma - e.gamma
 
-      this.state.player.isJumping = deltaGamma > 10
-      this.state.player.isLaying = deltaGamma < -5
+      this.state.isJumping = deltaGamma > 10
+      this.state.isLaying = deltaGamma < -5
 
       this.onStateUpdate(this.state)
     }
 
     this.handleTouchStart = () => {
-      this.state.isPaused = !this.state.isPaused
+      this.state.isGamePaused = !this.state.isGamePaused
 
       this.onStateUpdate(this.state)
     }

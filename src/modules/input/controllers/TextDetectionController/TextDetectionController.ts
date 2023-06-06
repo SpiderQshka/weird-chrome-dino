@@ -1,5 +1,5 @@
 import { State } from "../../../../types"
-import { INITIAL_STATE } from "../../constants"
+import { INITIAL_STATE } from "../../../../constants"
 import { Controller } from "../../types"
 
 export class TextDetectionController implements Controller {
@@ -33,7 +33,7 @@ export class TextDetectionController implements Controller {
     navigator.mediaDevices.getUserMedia(mediaStreamConstraints).then(stream => (this.videoElement.srcObject = stream))
 
     this.handleTouchStart = () => {
-      this.state.isPaused = !this.state.isPaused
+      this.state.isGamePaused = !this.state.isGamePaused
 
       this.onStateUpdate(this.state)
     }
@@ -52,8 +52,8 @@ export class TextDetectionController implements Controller {
       const textBlocks = await textDetector.detect(this.canvasElement)
 
       if (textBlocks.length === 0) {
-        this.state.player.isJumping = false
-        this.state.player.isLaying = false
+        this.state.isJumping = false
+        this.state.isLaying = false
 
         this.onStateUpdate(this.state)
 
@@ -62,8 +62,8 @@ export class TextDetectionController implements Controller {
 
       const texts = textBlocks.map(text => text.rawValue.toLowerCase()) as string[]
 
-      if (texts.some(word => word.includes("jump"))) this.state.player.isJumping = true
-      if (texts.some(word => word.includes("lay"))) this.state.player.isLaying = true
+      if (texts.some(word => word.includes("jump"))) this.state.isJumping = true
+      if (texts.some(word => word.includes("lay"))) this.state.isLaying = true
 
       this.onStateUpdate(this.state)
     }, 1000)

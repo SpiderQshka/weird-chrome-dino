@@ -1,13 +1,12 @@
 export interface State {
-  isPaused: boolean
-  player: {
-    isJumping: boolean
-    isLaying: boolean
-  }
+  isGamePaused: boolean
+  isJumping: boolean
+  isLaying: boolean
 }
 
 export interface ServerToClientEvents {
   "state:updated": (state: State) => void
+  "state:resetted": () => void
 }
 
 export interface ClientToServerEvents {

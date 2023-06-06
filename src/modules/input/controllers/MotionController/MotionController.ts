@@ -1,5 +1,5 @@
 import { State } from "../../../../types"
-import { INITIAL_STATE } from "../../constants"
+import { INITIAL_STATE } from "../../../../constants"
 import { Controller } from "../../types"
 
 export class MotionController implements Controller {
@@ -14,15 +14,15 @@ export class MotionController implements Controller {
     this.sensor = new LinearAccelerationSensor({ frequency: 60 })
 
     this.handleSensorRead = () => {
-      if (this.state.isPaused) return
+      if (this.state.isGamePaused) return
 
-      this.state.player.isJumping = this.sensor.x > 15
+      this.state.isJumping = this.sensor.x > 15
 
       if (this.sensor.x < -10) {
-        this.state.player.isLaying = true
+        this.state.isLaying = true
 
         setTimeout(() => {
-          this.state.player.isLaying = false
+          this.state.isLaying = false
           this.onStateUpdate(this.state)
         }, 1000)
       }
@@ -31,7 +31,7 @@ export class MotionController implements Controller {
     }
 
     this.handleTouchStart = () => {
-      this.state.isPaused = !this.state.isPaused
+      this.state.isGamePaused = !this.state.isGamePaused
 
       this.onStateUpdate(this.state)
     }

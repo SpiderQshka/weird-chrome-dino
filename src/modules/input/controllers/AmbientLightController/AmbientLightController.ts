@@ -1,5 +1,5 @@
 import { State } from "../../../../types"
-import { INITIAL_STATE } from "../../constants"
+import { INITIAL_STATE } from "../../../../constants"
 import { Controller } from "../../types"
 
 export class AmbientLightController implements Controller {
@@ -20,14 +20,14 @@ export class AmbientLightController implements Controller {
 
       const deltaIlluminance = this.initialIlluminance - this.sensor.illuminance
 
-      this.state.player.isJumping = deltaIlluminance <= -100
-      this.state.player.isLaying = deltaIlluminance >= 100
+      this.state.isJumping = deltaIlluminance <= -100
+      this.state.isLaying = deltaIlluminance >= 100
 
       this.onStateUpdate(this.state)
     }
 
     this.handleTouchStart = () => {
-      this.state.isPaused = !this.state.isPaused
+      this.state.isGamePaused = !this.state.isGamePaused
 
       this.onStateUpdate(this.state)
     }
