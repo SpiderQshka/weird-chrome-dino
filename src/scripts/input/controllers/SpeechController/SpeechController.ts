@@ -6,8 +6,8 @@ export class SpeechController implements Controller {
   state: State
   pauseButton: HTMLButtonElement
   speechRecognition: SpeechRecognition
-  timeout: ReturnType<typeof setTimeout>
 
+  handleSpeechRecognitionEnd: () => void
   handlePauseButtonClick: () => void
 
   constructor() {
@@ -45,14 +45,14 @@ export class SpeechController implements Controller {
         setTimeout(() => {
           this.state.isJumping = false
           this.onStateUpdate(this.state)
-        })
+        }, 100)
       }
 
       this.onStateUpdate(this.state)
     }
 
-    this.speechRecognition.onend = () => {
-      this.timeout = setTimeout(() => {
+    this.handleSpeechRecognitionEnd = () => {
+      setTimeout(() => {
         this.speechRecognition.start()
       }, 100)
     }
@@ -65,12 +65,13 @@ export class SpeechController implements Controller {
   }
 
   initialize() {
+    this.speechRecognition.addEventListener("end", this.handleSpeechRecognitionEnd)
     this.pauseButton.addEventListener("click", this.handlePauseButtonClick)
     this.speechRecognition.start()
   }
 
   cleanup() {
-    clearTimeout(this.timeout)
+    this.speechRecognition.removeEventListener("end", this.handleSpeechRecognitionEnd)
     this.pauseButton.removeEventListener("click", this.handlePauseButtonClick)
     this.speechRecognition.stop()
   }

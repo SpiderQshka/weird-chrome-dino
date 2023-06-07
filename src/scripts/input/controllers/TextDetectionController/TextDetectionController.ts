@@ -34,6 +34,9 @@ export class TextDetectionController implements Controller {
   }
 
   initialize() {
+    document.body.appendChild(this.videoElement)
+    document.body.appendChild(this.canvasElement)
+
     const mediaStreamConstraints = {
       video: {
         facingMode: {
@@ -43,9 +46,6 @@ export class TextDetectionController implements Controller {
     }
 
     navigator.mediaDevices.getUserMedia(mediaStreamConstraints).then(stream => (this.videoElement.srcObject = stream))
-
-    document.body.appendChild(this.videoElement)
-    document.body.appendChild(this.canvasElement)
 
     const ctx = this.canvasElement.getContext("2d")
     const textDetector = new (window as any).TextDetector()
