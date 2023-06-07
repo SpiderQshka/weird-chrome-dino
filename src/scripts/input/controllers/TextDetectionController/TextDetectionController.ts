@@ -53,28 +53,46 @@ export class TextDetectionController implements Controller {
     this.interval = setInterval(async () => {
       ctx.drawImage(this.videoElement, 0, 0, this.canvasElement.width, this.canvasElement.height)
 
-      const textBlocks = await textDetector.detect(this.canvasElement)
+      textDetector.detect(this.canvasElement).then(textBlocks => {
+        if (textBlocks.length === 0) {
+          this.state.isJumping = false
+          this.state.isLaying = false
 
-      if (textBlocks.length === 0) {
-        this.state.isJumping = false
-        this.state.isLaying = false
+          this.onStateUpdate(this.state)
 
-        alert("Empty block")
+          return
+        }
+
+        const texts = textBlocks.map(text => text.rawValue.toLowerCase()) as string[]
+
+        if (texts.some(word => word.includes("jump"))) this.state.isJumping = true
+        if (texts.some(word => word.includes("lay"))) this.state.isLaying = true
 
         this.onStateUpdate(this.state)
-
-        return
-      }
-
-      const texts = textBlocks.map(text => text.rawValue.toLowerCase()) as string[]
-
-      alert(texts)
-
-      if (texts.some(word => word.includes("jump"))) this.state.isJumping = true
-      if (texts.some(word => word.includes("lay"))) this.state.isLaying = true
-
-      this.onStateUpdate(this.state)
+      })
     }, 1000)
+
+    // this.interval = setInterval(async () => {
+    //   ctx.drawImage(this.videoElement, 0, 0, this.canvasElement.width, this.canvasElement.height)
+
+    //   const textBlocks = await textDetector.detect(this.canvasElement)
+
+    //   if (textBlocks.length === 0) {
+    //     this.state.isJumping = false
+    //     this.state.isLaying = false
+
+    //     this.onStateUpdate(this.state)
+
+    //     return
+    //   }
+
+    //   const texts = textBlocks.map(text => text.rawValue.toLowerCase()) as string[]
+
+    //   if (texts.some(word => word.includes("jump"))) this.state.isJumping = true
+    //   if (texts.some(word => word.includes("lay"))) this.state.isLaying = true
+
+    //   this.onStateUpdate(this.state)
+    // }, 1000)
 
     this.pauseButton.addEventListener("click", this.handlePauseButtonClick)
   }
