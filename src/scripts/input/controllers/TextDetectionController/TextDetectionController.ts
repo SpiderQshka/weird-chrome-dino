@@ -39,12 +39,11 @@ export class TextDetectionController implements Controller {
           return
         }
 
+        const eye = faces[0].landmarks[0]
+
         alert(
-          faces[0].landmarks
-            .map(
-              ({ type, boundingBox: { top, left, width, height } }) =>
-                `${type}. H: ${height}, W: ${width}, T: ${top}, L: ${left}`,
-            )
+          Object.entries(eye)
+            .map(([key, value]) => `${key}: ${value}`)
             .join(", "),
         )
       })
