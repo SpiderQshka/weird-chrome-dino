@@ -39,7 +39,7 @@ export class TextDetectionController implements Controller {
           return
         }
 
-        alert(faces[0].landmarks)
+        alert(faces[0].landmarks.map(({ type }) => type).join(", "))
       })
     }, 5000)
   }
