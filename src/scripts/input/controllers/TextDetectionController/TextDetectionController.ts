@@ -12,35 +12,36 @@ export class TextDetectionController implements Controller {
   constructor() {
     this.playerState = INITIAL_PLAYER_STATE
 
-    // this.videoElement = document.createElement("video")
-    // this.videoElement.autoplay = true
-    // this.videoElement.width = window.innerWidth
-    // this.videoElement.height = window.innerHeight
-
-    // this.canvasElement = document.createElement("canvas")
-    // this.canvasElement.hidden = true
+    this.videoElement = document.createElement("video")
+    this.videoElement.autoplay = true
   }
 
   async initialize() {
-    // this.canvasElement = document.createElement("canvas")
-    // this.canvasElement.hidden = true
+    document.body.appendChild(this.videoElement)
 
-    // document.body.appendChild(this.canvasElement)
+    const mediaStreamConstraints = {
+      video: {
+        facingMode: {
+          exact: "user",
+        },
+      },
+    }
+
+    navigator.mediaDevices.getUserMedia(mediaStreamConstraints).then(stream => (this.videoElement.srcObject = stream))
 
     const faceDetector = new (window as any).FaceDetector()
-    const mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "user" },
-    })
-
-    const video = document.createElement("video")
-    video.srcObject = mediaStream
-    video.autoplay = true
-
-    document.body.appendChild(video)
 
     setInterval(() => {
-      faceDetector.detect(video).then(faces => alert(faces.length))
-    }, 2000)
+      faceDetector.detect(this.videoElement).then(faces => {
+        if (faces.length === 0) {
+          alert("No faces")
+
+          return
+        }
+
+        alert(faces[0].landmarks)
+      })
+    }, 5000)
   }
 
   // initialize() {
