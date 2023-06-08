@@ -41,11 +41,13 @@ export class TextDetectionController implements Controller {
 
         const eye = faces[0].landmarks[0]
 
-        alert(
-          Object.entries(eye)
-            .map(([key, value]: any) => `${key}: ${value?.join(",") || value}`)
-            .join("; "),
-        )
+        eye.locations.forEach(location => alert(location))
+
+        // alert(
+        //   Object.entries(eye)
+        //     .map(([key, value]) => `${key}: ${value}`)
+        //     .join("; "),
+        // )
       })
     }, 5000)
   }
