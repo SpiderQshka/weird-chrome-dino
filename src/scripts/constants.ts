@@ -6,5 +6,5 @@ export const INITIAL_PLAYER_STATE: PlayerState = {
 }
 
 export const INITIAL_GAME_STATE: GameState = {
-  isPaused: true,
+  isPaused: false,
 }

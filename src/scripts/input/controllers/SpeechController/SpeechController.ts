@@ -26,8 +26,6 @@ export class SpeechController implements Controller {
         transcripts.push(lastSpeechRecognitionResult[i].transcript.trim().toLowerCase())
       }
 
-      alert(transcripts)
-
       if (transcripts.includes("stand up")) {
         this.playerState.isCrouching = false
       }
@@ -36,7 +34,7 @@ export class SpeechController implements Controller {
         this.playerState.isCrouching = true
       }
 
-      if (transcripts.includes("leap over")) {
+      if (transcripts.includes("jump over")) {
         this.playerState.isLeaping = true
         this.playerState.isCrouching = false
 
