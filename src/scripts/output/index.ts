@@ -4,7 +4,7 @@ import { io, Socket } from "socket.io-client"
 
 import { Game } from "./entities/Game"
 import { ClientToServerEvents, ServerToClientEvents } from "@root/scripts/types"
-import { INITIAL_STATE } from "@root/scripts/constants"
+import { INITIAL_GAME_STATE, INITIAL_PLAYER_STATE } from "@root/scripts/constants"
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io()
 
@@ -14,5 +14,5 @@ document.body.appendChild(canvas)
 const game = new Game(canvas)
 game.start()
 
-socket.on("state:updated", state => game.updateState(state))
-socket.on("state:resetted", () => game.updateState(INITIAL_STATE))
+socket.on("playerState:updated", playerState => game.updatePlayerState(playerState || INITIAL_PLAYER_STATE))
+socket.on("gameState:updated", gameState => game.updateGameState(gameState || INITIAL_GAME_STATE))

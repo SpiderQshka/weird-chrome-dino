@@ -24,8 +24,13 @@ const httpServer = createServer(app)
 const io = new Server(httpServer)
 
 io.on("connection", socket => {
-  socket.on("state:update", state => socket.broadcast.emit("state:updated", state))
-  socket.on("disconnecting", () => socket.broadcast.emit("state:resetted"))
+  socket.on("playerState:update", state => socket.broadcast.emit("playerState:updated", state))
+  socket.on("gameState:update", state => socket.broadcast.emit("gameState:updated", state))
+
+  socket.on("disconnecting", () => {
+    socket.broadcast.emit("playerState:updated", null)
+    socket.broadcast.emit("gameState:updated", null)
+  })
 })
 
 httpServer.listen(3000)

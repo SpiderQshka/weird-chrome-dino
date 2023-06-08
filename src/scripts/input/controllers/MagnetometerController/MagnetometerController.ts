@@ -1,9 +1,9 @@
-import { State } from "@root/scripts/types"
-import { INITIAL_STATE } from "@root/scripts/constants"
+import { PlayerState } from "@root/scripts/types"
+import { INITIAL_PLAYER_STATE } from "@root/scripts/constants"
 import { Controller } from "../types"
 
 export class MagnetometerController implements Controller {
-  state: State
+  playerState: PlayerState
   sensor: Magnetometer
 
   initialSensorState: { x: number; y: number; z: number }
@@ -11,7 +11,7 @@ export class MagnetometerController implements Controller {
   handleSensorRead: () => void
 
   constructor() {
-    this.state = INITIAL_STATE
+    this.playerState = INITIAL_PLAYER_STATE
     this.sensor = new Magnetometer({ frequency: 30 })
 
     this.handleSensorRead = () => {
@@ -21,10 +21,10 @@ export class MagnetometerController implements Controller {
 
       const deltaY = this.initialSensorState.y - this.sensor.y
 
-      this.state.isJumping = deltaY > 10
-      this.state.isLaying = deltaY < -10
+      this.playerState.isLeaping = deltaY > 10
+      this.playerState.isCrouching = deltaY < -10
 
-      this.onStateUpdate(this.state)
+      this.onPlayerStateUpdate(this.playerState)
     }
   }
 
@@ -40,5 +40,5 @@ export class MagnetometerController implements Controller {
     this.sensor.stop()
   }
 
-  onStateUpdate: (state: State) => void
+  onPlayerStateUpdate: (playerState: PlayerState) => void
 }

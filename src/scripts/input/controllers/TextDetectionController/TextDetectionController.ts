@@ -1,16 +1,16 @@
-import { State } from "@root/scripts/types"
-import { INITIAL_STATE } from "@root/scripts/constants"
+import { PlayerState } from "@root/scripts/types"
+import { INITIAL_PLAYER_STATE } from "@root/scripts/constants"
 import { Controller } from "../types"
 
 export class TextDetectionController implements Controller {
-  state: State
+  playerState: PlayerState
 
   videoElement: HTMLVideoElement
   canvasElement: HTMLCanvasElement
   interval: ReturnType<typeof setInterval>
 
   constructor() {
-    this.state = INITIAL_STATE
+    this.playerState = INITIAL_PLAYER_STATE
 
     this.videoElement = document.createElement("video")
     this.videoElement.autoplay = true
@@ -44,20 +44,20 @@ export class TextDetectionController implements Controller {
       const textBlocks = await textDetector.detect(this.canvasElement)
 
       if (textBlocks.length === 0) {
-        this.state.isJumping = false
-        this.state.isLaying = false
+        this.playerState.isLeaping = false
+        this.playerState.isCrouching = false
 
-        this.onStateUpdate(this.state)
+        this.onPlayerStateUpdate(this.playerState)
 
         return
       }
 
       const texts = textBlocks.map(text => text.rawValue.toLowerCase()) as string[]
 
-      if (texts.some(word => word.includes("jump"))) this.state.isJumping = true
-      if (texts.some(word => word.includes("lay"))) this.state.isLaying = true
+      if (texts.some(word => word.includes("leap"))) this.playerState.isLeaping = true
+      if (texts.some(word => word.includes("crouch"))) this.playerState.isCrouching = true
 
-      this.onStateUpdate(this.state)
+      this.onPlayerStateUpdate(this.playerState)
     }, 1000)
   }
 
@@ -68,5 +68,5 @@ export class TextDetectionController implements Controller {
     clearInterval(this.interval)
   }
 
-  onStateUpdate: (state: State) => void
+  onPlayerStateUpdate: (playerState: PlayerState) => void
 }

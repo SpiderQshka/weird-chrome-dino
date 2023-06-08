@@ -1,15 +1,15 @@
-import { State } from "@root/scripts/types"
-import { INITIAL_STATE } from "@root/scripts/constants"
+import { PlayerState } from "@root/scripts/types"
+import { INITIAL_PLAYER_STATE } from "@root/scripts/constants"
 import { Controller } from "../types"
 
 export class SpeechController implements Controller {
-  state: State
+  playerState: PlayerState
   speechRecognition: SpeechRecognition
 
   handleSpeechRecognitionEnd: () => void
 
   constructor() {
-    this.state = INITIAL_STATE
+    this.playerState = INITIAL_PLAYER_STATE
 
     this.speechRecognition = new webkitSpeechRecognition()
 
@@ -27,24 +27,24 @@ export class SpeechController implements Controller {
       }
 
       if (transcripts.includes("stand up")) {
-        this.state.isLaying = false
+        this.playerState.isCrouching = false
       }
 
-      if (transcripts.includes("lay down")) {
-        this.state.isLaying = true
+      if (transcripts.includes("crouch down")) {
+        this.playerState.isCrouching = true
       }
 
-      if (transcripts.includes("jump over")) {
-        this.state.isJumping = true
-        this.state.isLaying = false
+      if (transcripts.includes("leap over")) {
+        this.playerState.isLeaping = true
+        this.playerState.isCrouching = false
 
         setTimeout(() => {
-          this.state.isJumping = false
-          this.onStateUpdate(this.state)
+          this.playerState.isLeaping = false
+          this.onPlayerStateUpdate(this.playerState)
         }, 100)
       }
 
-      this.onStateUpdate(this.state)
+      this.onPlayerStateUpdate(this.playerState)
     }
 
     this.handleSpeechRecognitionEnd = () => {
@@ -64,5 +64,5 @@ export class SpeechController implements Controller {
     this.speechRecognition.stop()
   }
 
-  onStateUpdate: (state: State) => void
+  onPlayerStateUpdate: (playerState: PlayerState) => void
 }

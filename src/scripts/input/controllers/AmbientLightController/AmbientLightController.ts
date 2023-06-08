@@ -1,16 +1,16 @@
-import { State } from "@root/scripts/types"
-import { INITIAL_STATE } from "@root/scripts/constants"
+import { PlayerState } from "@root/scripts/types"
+import { INITIAL_PLAYER_STATE } from "@root/scripts/constants"
 import { Controller } from "../types"
 
 export class AmbientLightController implements Controller {
-  state: State
+  playerState: PlayerState
   sensor: AmbientLightSensor
   initialIlluminance: number
 
   handleSensorRead: () => void
 
   constructor() {
-    this.state = INITIAL_STATE
+    this.playerState = INITIAL_PLAYER_STATE
     this.sensor = new AmbientLightSensor()
     this.initialIlluminance = null
 
@@ -19,10 +19,10 @@ export class AmbientLightController implements Controller {
 
       const deltaIlluminance = this.initialIlluminance - this.sensor.illuminance
 
-      this.state.isJumping = deltaIlluminance <= -100
-      this.state.isLaying = deltaIlluminance >= 100
+      this.playerState.isLeaping = deltaIlluminance <= -100
+      this.playerState.isCrouching = deltaIlluminance >= 100
 
-      this.onStateUpdate(this.state)
+      this.onPlayerStateUpdate(this.playerState)
     }
   }
 
@@ -38,5 +38,5 @@ export class AmbientLightController implements Controller {
     this.sensor.stop()
   }
 
-  onStateUpdate: (state: State) => void
+  onPlayerStateUpdate: (playerState: PlayerState) => void
 }

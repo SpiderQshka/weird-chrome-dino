@@ -1,46 +1,41 @@
-import { State } from "@root/scripts/types"
-import { INITIAL_STATE } from "@root/scripts/constants"
+import { PlayerState } from "@root/scripts/types"
+import { INITIAL_PLAYER_STATE } from "@root/scripts/constants"
 import { Controller } from "../types"
 
-const JUMP_KEY_CODES = ["Space"]
-const LAY_KEY_CODES = ["ShiftLeft"]
-const PAUSE_KEY_CODES = ["Enter"]
+const LEAP_KEY_CODES = ["Space"]
+const CROUCH_KEY_CODES = ["ShiftLeft"]
 
 export class KeyboardController implements Controller {
-  state: State
+  playerState: PlayerState
 
   handleKeyDown: (e: KeyboardEvent) => void
   handleKeyUp: (e: KeyboardEvent) => void
 
   constructor() {
-    this.state = INITIAL_STATE
+    this.playerState = INITIAL_PLAYER_STATE
 
     this.handleKeyDown = ({ code }) => {
-      if (JUMP_KEY_CODES.includes(code)) {
-        this.state.isJumping = true
+      if (LEAP_KEY_CODES.includes(code)) {
+        this.playerState.isLeaping = true
       }
 
-      if (LAY_KEY_CODES.includes(code)) {
-        this.state.isLaying = true
+      if (CROUCH_KEY_CODES.includes(code)) {
+        this.playerState.isCrouching = true
       }
 
-      if (PAUSE_KEY_CODES.includes(code)) {
-        this.state.isGamePaused = !this.state.isGamePaused
-      }
-
-      this.onStateUpdate(this.state)
+      this.onPlayerStateUpdate(this.playerState)
     }
 
     this.handleKeyUp = ({ code }) => {
-      if (JUMP_KEY_CODES.includes(code)) {
-        this.state.isJumping = false
+      if (LEAP_KEY_CODES.includes(code)) {
+        this.playerState.isLeaping = false
       }
 
-      if (LAY_KEY_CODES.includes(code)) {
-        this.state.isLaying = false
+      if (CROUCH_KEY_CODES.includes(code)) {
+        this.playerState.isCrouching = false
       }
 
-      this.onStateUpdate(this.state)
+      this.onPlayerStateUpdate(this.playerState)
     }
   }
 
@@ -54,5 +49,5 @@ export class KeyboardController implements Controller {
     document.removeEventListener("keyup", this.handleKeyUp)
   }
 
-  onStateUpdate: (state: State) => void
+  onPlayerStateUpdate: (playerState: PlayerState) => void
 }

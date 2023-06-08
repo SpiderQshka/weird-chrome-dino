@@ -1,32 +1,30 @@
-import { State } from "@root/scripts/types"
-import { INITIAL_STATE } from "@root/scripts/constants"
+import { PlayerState } from "@root/scripts/types"
+import { INITIAL_PLAYER_STATE } from "@root/scripts/constants"
 import { Controller } from "../types"
 
 export class MotionController implements Controller {
-  state: State
+  playerState: PlayerState
   sensor: LinearAccelerationSensor
 
   handleSensorRead: () => void
 
   constructor() {
-    this.state = INITIAL_STATE
+    this.playerState = INITIAL_PLAYER_STATE
     this.sensor = new LinearAccelerationSensor({ frequency: 60 })
 
     this.handleSensorRead = () => {
-      if (this.state.isGamePaused) return
-
-      this.state.isJumping = this.sensor.x > 15
+      this.playerState.isLeaping = this.sensor.x > 15
 
       if (this.sensor.x < -10) {
-        this.state.isLaying = true
+        this.playerState.isCrouching = true
 
         setTimeout(() => {
-          this.state.isLaying = false
-          this.onStateUpdate(this.state)
+          this.playerState.isCrouching = false
+          this.onPlayerStateUpdate(this.playerState)
         }, 1000)
       }
 
-      this.onStateUpdate(this.state)
+      this.onPlayerStateUpdate(this.playerState)
     }
   }
 
@@ -42,5 +40,5 @@ export class MotionController implements Controller {
     this.sensor.stop()
   }
 
-  onStateUpdate: (state: State) => void
+  onPlayerStateUpdate: (playerState: PlayerState) => void
 }

@@ -2,7 +2,7 @@ import { Score } from "./Score"
 import { Obstacle } from "./Obstacle"
 import { Player } from "./Player"
 import { GAME_SPEED, GAME_SPEED_FACTOR, INITIAL_SPAWN_TIMER, MIN_SPAWN_TIMER } from "../gameConfig"
-import { State } from "@root/scripts/types"
+import { GameState, PlayerState } from "@root/scripts/types"
 
 export class Game {
   canvas: HTMLCanvasElement
@@ -11,7 +11,7 @@ export class Game {
   player: Player
   obstacles: Obstacle[]
   gameSpeed: number
-  isGamePaused: boolean
+  isPaused: boolean
 
   spawnTimer: number
 
@@ -51,7 +51,7 @@ export class Game {
   main() {
     requestAnimationFrame(() => this.main())
 
-    if (this.isGamePaused) return
+    if (this.isPaused) return
 
     this.update()
     this.render()
@@ -124,12 +124,11 @@ export class Game {
     this.score.render(this.ctx)
   }
 
-  updateState({
-    isGamePaused = this.isGamePaused,
-    isJumping = this.player.state.isJumping,
-    isLaying = this.player.state.isLaying,
-  }: State) {
-    this.isGamePaused = isGamePaused
-    this.player.state = { isJumping, isLaying }
+  updatePlayerState(playerState: PlayerState) {
+    this.player.state = playerState
+  }
+
+  updateGameState(gameState: GameState) {
+    this.isPaused = gameState.isPaused
   }
 }

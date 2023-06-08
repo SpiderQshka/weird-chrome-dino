@@ -1,25 +1,25 @@
-import { State } from "@root/scripts/types"
-import { INITIAL_STATE } from "@root/scripts/constants"
+import { PlayerState } from "@root/scripts/types"
+import { INITIAL_PLAYER_STATE } from "@root/scripts/constants"
 import { Controller } from "../types"
 
 export class OrientationController implements Controller {
-  state: State
+  playerState: PlayerState
   initialSensorState: { alpha: number; beta: number; gamma: number }
 
   handleDeviceOrientation: (e: DeviceOrientationEvent) => void
 
   constructor() {
-    this.state = INITIAL_STATE
+    this.playerState = INITIAL_PLAYER_STATE
 
     this.handleDeviceOrientation = e => {
       if (!this.initialSensorState) this.initialSensorState = e
 
       const deltaGamma = this.initialSensorState.gamma - e.gamma
 
-      this.state.isJumping = deltaGamma > 10
-      this.state.isLaying = deltaGamma < -5
+      this.playerState.isLeaping = deltaGamma > 10
+      this.playerState.isCrouching = deltaGamma < -5
 
-      this.onStateUpdate(this.state)
+      this.onPlayerStateUpdate(this.playerState)
     }
   }
 
@@ -31,5 +31,5 @@ export class OrientationController implements Controller {
     window.removeEventListener("deviceorientation", this.handleDeviceOrientation)
   }
 
-  onStateUpdate: (state: State) => void
+  onPlayerStateUpdate: (playerState: PlayerState) => void
 }

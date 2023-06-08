@@ -1,5 +1,5 @@
 import { Position, Size } from "../types"
-import { GRAVITY, JUMP_FORCE } from "../gameConfig"
+import { GRAVITY, LEAP_FORCE } from "../gameConfig"
 
 type PlayerConfig = {
   position: Position
@@ -14,15 +14,15 @@ export class Player {
   height: number
 
   dy: number
-  jumpForce: number
+  leapForce: number
   originalHeight: number
   grounded: boolean
   gravity: number
   canvasHeight: number
 
   state: {
-    isJumping: boolean
-    isLaying: boolean
+    isLeaping: boolean
+    isCrouching: boolean
   }
 
   constructor({ canvasHeight, position, size }: PlayerConfig) {
@@ -32,20 +32,20 @@ export class Player {
     this.height = size.height
 
     this.dy = 0
-    this.jumpForce = JUMP_FORCE
+    this.leapForce = LEAP_FORCE
     this.originalHeight = size.height
     this.grounded = false
     this.gravity = GRAVITY
     this.canvasHeight = canvasHeight
 
-    this.state = { isJumping: false, isLaying: false }
+    this.state = { isLeaping: false, isCrouching: false }
   }
 
   update() {
     this.stay()
 
-    if (this.state.isJumping) this.jump()
-    if (this.state.isLaying) this.lay()
+    if (this.state.isLeaping) this.leap()
+    if (this.state.isCrouching) this.crouch()
 
     this.y += this.dy
 
@@ -61,13 +61,13 @@ export class Player {
     }
   }
 
-  jump() {
+  leap() {
     if (!this.grounded) return
 
-    this.dy = -this.jumpForce
+    this.dy = -this.leapForce
   }
 
-  lay() {
+  crouch() {
     this.height = this.originalHeight / 2
   }
 

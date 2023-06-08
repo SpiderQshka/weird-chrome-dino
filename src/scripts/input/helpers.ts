@@ -1,10 +1,10 @@
-import { State } from "@root/scripts/types"
-import { INITIAL_STATE } from "@root/scripts/constants"
+import { PlayerState } from "@root/scripts/types"
+import { INITIAL_GAME_STATE } from "@root/scripts/constants"
 import { Controller } from "./controllers/types"
 
 export function initializeControllerSelect(
   controllers: { [key: string]: new () => Controller },
-  onStateUpdate: (state: State) => void,
+  onPlayerStateUpdate: (playerState: PlayerState) => void,
 ) {
   const select = document.createElement("select")
 
@@ -38,19 +38,19 @@ export function initializeControllerSelect(
     controller = new Controller()
 
     controller.initialize()
-    controller.onStateUpdate = onStateUpdate
+    controller.onPlayerStateUpdate = onPlayerStateUpdate
   }
 
   document.body.appendChild(select)
 }
 
-export function createPauseButton(onClick: (isGamePaused: boolean) => void) {
-  let isGamePaused = INITIAL_STATE.isGamePaused
+export function initializePauseButton(onClick: (isPaused: boolean) => void) {
+  let isPaused = INITIAL_GAME_STATE.isPaused
 
   const handleClick = () => {
-    onClick(isGamePaused)
+    onClick(isPaused)
 
-    isGamePaused = !isGamePaused
+    isPaused = !isPaused
   }
 
   const pauseButton = document.createElement("button")
