@@ -3,6 +3,7 @@ import { Obstacle } from "./Obstacle"
 import { Player } from "./Player"
 import { GAME_SPEED, GAME_SPEED_FACTOR, INITIAL_SPAWN_TIMER, MIN_SPAWN_TIMER } from "../gameConfig"
 import { GameState, PlayerState } from "@root/scripts/types"
+import { INITIAL_GAME_STATE } from "@root/scripts/constants"
 
 export class Game {
   canvas: HTMLCanvasElement
@@ -18,6 +19,8 @@ export class Game {
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
     this.ctx = this.canvas.getContext("2d")
+
+    this.isPaused = INITIAL_GAME_STATE.isPaused
 
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight

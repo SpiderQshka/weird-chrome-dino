@@ -32,7 +32,7 @@ export class SpeechController implements Controller {
         this.playerState.isCrouching = false
       }
 
-      if (transcripts.includes("crouch down")) {
+      if (transcripts.includes("get down")) {
         this.playerState.isCrouching = true
       }
 
