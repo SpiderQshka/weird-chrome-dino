@@ -41,7 +41,7 @@ export class TextDetectionController implements Controller {
 
         const eye = faces[0].landmarks[0]
 
-        eye.locations.forEach(location => alert(location))
+        eye.locations.forEach(location => alert(Object.values(location).join(", ")))
 
         // alert(
         //   Object.entries(eye)
