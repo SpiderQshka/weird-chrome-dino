@@ -43,8 +43,8 @@ export class TextDetectionController implements Controller {
 
         alert(
           Object.entries(eye)
-            .map(([key, value]) => `${key}: ${value}`)
-            .join(", "),
+            .map(([key, value]: any) => `${key}: ${value.join(",")}`)
+            .join("; "),
         )
       })
     }, 5000)
