@@ -4,16 +4,12 @@ import { Controller } from "../types"
 
 export class SpeechController implements Controller {
   state: State
-  pauseButton: HTMLButtonElement
   speechRecognition: SpeechRecognition
 
   handleSpeechRecognitionEnd: () => void
-  handlePauseButtonClick: () => void
 
   constructor() {
     this.state = INITIAL_STATE
-
-    this.pauseButton = document.querySelector("button")
 
     this.speechRecognition = new webkitSpeechRecognition()
 
@@ -56,23 +52,15 @@ export class SpeechController implements Controller {
         this.speechRecognition.start()
       }, 100)
     }
-
-    this.handlePauseButtonClick = () => {
-      this.state.isGamePaused = !this.state.isGamePaused
-
-      this.onStateUpdate(this.state)
-    }
   }
 
   initialize() {
     this.speechRecognition.addEventListener("end", this.handleSpeechRecognitionEnd)
-    this.pauseButton.addEventListener("click", this.handlePauseButtonClick)
     this.speechRecognition.start()
   }
 
   cleanup() {
     this.speechRecognition.removeEventListener("end", this.handleSpeechRecognitionEnd)
-    this.pauseButton.removeEventListener("click", this.handlePauseButtonClick)
     this.speechRecognition.stop()
   }
 

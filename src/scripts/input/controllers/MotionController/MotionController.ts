@@ -4,17 +4,13 @@ import { Controller } from "../types"
 
 export class MotionController implements Controller {
   state: State
-  pauseButton: HTMLButtonElement
   sensor: LinearAccelerationSensor
 
   handleSensorRead: () => void
-  handlePauseButtonClick: () => void
 
   constructor() {
     this.state = INITIAL_STATE
     this.sensor = new LinearAccelerationSensor({ frequency: 60 })
-
-    this.pauseButton = document.querySelector("button")
 
     this.handleSensorRead = () => {
       if (this.state.isGamePaused) return
@@ -32,24 +28,16 @@ export class MotionController implements Controller {
 
       this.onStateUpdate(this.state)
     }
-
-    this.handlePauseButtonClick = () => {
-      this.state.isGamePaused = !this.state.isGamePaused
-
-      this.onStateUpdate(this.state)
-    }
   }
 
   initialize() {
     this.sensor.addEventListener("reading", this.handleSensorRead)
-    this.pauseButton.addEventListener("click", this.handlePauseButtonClick)
 
     this.sensor.start()
   }
 
   cleanup() {
     this.sensor.removeEventListener("reading", this.handleSensorRead)
-    this.pauseButton.removeEventListener("click", this.handlePauseButtonClick)
 
     this.sensor.stop()
   }

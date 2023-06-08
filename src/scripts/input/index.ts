@@ -1,4 +1,5 @@
 import "@root/styles/reset.css"
+import "@root/styles/input.css"
 
 import { io, Socket } from "socket.io-client"
 
@@ -27,4 +28,4 @@ const controllers = {
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io()
 
 initializeControllerSelect(controllers, state => socket.emit("state:update", state))
-createPauseButton()
+createPauseButton(isGamePaused => socket.emit("state:update", { isGamePaused }))

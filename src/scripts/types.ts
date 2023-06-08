@@ -1,7 +1,7 @@
 export interface State {
-  isGamePaused: boolean
-  isJumping: boolean
-  isLaying: boolean
+  isGamePaused?: boolean
+  isJumping?: boolean
+  isLaying?: boolean
 }
 
 export interface ServerToClientEvents {

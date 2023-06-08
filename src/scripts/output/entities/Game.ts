@@ -124,7 +124,11 @@ export class Game {
     this.score.render(this.ctx)
   }
 
-  updateState({ isGamePaused, isJumping, isLaying }: State) {
+  updateState({
+    isGamePaused = this.isGamePaused,
+    isJumping = this.player.state.isJumping,
+    isLaying = this.player.state.isLaying,
+  }: State) {
     this.isGamePaused = isGamePaused
     this.player.state = { isJumping, isLaying }
   }

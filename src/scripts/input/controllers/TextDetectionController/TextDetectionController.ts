@@ -5,18 +5,12 @@ import { Controller } from "../types"
 export class TextDetectionController implements Controller {
   state: State
 
-  handlePauseButtonClick: () => void
-
-  pauseButton: HTMLButtonElement
-
   videoElement: HTMLVideoElement
   canvasElement: HTMLCanvasElement
   interval: ReturnType<typeof setInterval>
 
   constructor() {
     this.state = INITIAL_STATE
-
-    this.pauseButton = document.querySelector("button")
 
     this.videoElement = document.createElement("video")
     this.videoElement.autoplay = true
@@ -25,12 +19,6 @@ export class TextDetectionController implements Controller {
 
     this.canvasElement = document.createElement("canvas")
     this.canvasElement.hidden = true
-
-    this.handlePauseButtonClick = () => {
-      this.state.isGamePaused = !this.state.isGamePaused
-
-      this.onStateUpdate(this.state)
-    }
   }
 
   initialize() {
@@ -71,8 +59,6 @@ export class TextDetectionController implements Controller {
 
       this.onStateUpdate(this.state)
     }, 1000)
-
-    this.pauseButton.addEventListener("click", this.handlePauseButtonClick)
   }
 
   cleanup() {
@@ -80,8 +66,6 @@ export class TextDetectionController implements Controller {
     document.body.removeChild(this.canvasElement)
 
     clearInterval(this.interval)
-
-    this.pauseButton.removeEventListener("click", this.handlePauseButtonClick)
   }
 
   onStateUpdate: (state: State) => void

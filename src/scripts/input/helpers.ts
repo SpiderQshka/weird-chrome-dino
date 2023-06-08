@@ -1,4 +1,5 @@
 import { State } from "@root/scripts/types"
+import { INITIAL_STATE } from "@root/scripts/constants"
 import { Controller } from "./controllers/types"
 
 export function initializeControllerSelect(
@@ -43,10 +44,20 @@ export function initializeControllerSelect(
   document.body.appendChild(select)
 }
 
-export function createPauseButton() {
+export function createPauseButton(onClick: (isGamePaused: boolean) => void) {
+  let isGamePaused = INITIAL_STATE.isGamePaused
+
+  const handleClick = () => {
+    onClick(isGamePaused)
+
+    isGamePaused = !isGamePaused
+  }
+
   const pauseButton = document.createElement("button")
 
   pauseButton.innerText = "Pause / Continue"
+
+  pauseButton.addEventListener("click", handleClick)
 
   document.body.appendChild(pauseButton)
 }
