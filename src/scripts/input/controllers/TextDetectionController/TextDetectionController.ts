@@ -25,7 +25,7 @@ export class TextDetectionController implements Controller {
     const mediaStreamConstraints = {
       video: {
         facingMode: {
-          exact: "environment",
+          exact: "user",
         },
       },
     }
@@ -36,22 +36,20 @@ export class TextDetectionController implements Controller {
     document.body.appendChild(this.canvasElement)
 
     const ctx = this.canvasElement.getContext("2d")
-    const faceDetector = new (window as any).FaceDetector({
-      maxDetectedFaces: 1,
-    })
+    const faceDetector = new (window as any).FaceDetector()
 
     this.interval = setInterval(async () => {
       ctx.drawImage(this.videoElement, 0, 0, this.canvasElement.width, this.canvasElement.height)
 
       const faces = await faceDetector.detect(this.canvasElement)
 
-      if(faces.length === 0){
-        alert("No faces detected")
+      // if(faces.length === 0){
+      //   alert("No faces detected")
 
-        return
-      }
+      //   return
+      // }
 
-      alert(faces[0])
+      alert(faces.length)
 
       // if (textBlocks.length === 0) {
       //   this.playerState.isLeaping = false
@@ -68,7 +66,7 @@ export class TextDetectionController implements Controller {
       // if (texts.some(word => word.includes("crouch"))) this.playerState.isCrouching = true
 
       // this.onPlayerStateUpdate(this.playerState)
-    }, 1000)
+    }, 3000)
   }
 
   cleanup() {
