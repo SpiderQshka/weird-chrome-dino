@@ -22,23 +22,21 @@ export class TextDetectionController implements Controller {
   }
 
   async initialize() {
-    this.canvasElement = document.createElement("canvas")
+    // this.canvasElement = document.createElement("canvas")
     // this.canvasElement.hidden = true
 
-    document.body.appendChild(this.canvasElement)
+    // document.body.appendChild(this.canvasElement)
 
     const faceDetector = new (window as any).FaceDetector()
     const mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment" },
+      video: { facingMode: "user" },
     })
 
     const video = document.createElement("video")
     video.srcObject = mediaStream
     video.autoplay = true
-    video.onloadedmetadata = () => {
-      this.canvasElement.width = video.videoWidth
-      this.canvasElement.height = video.videoHeight
-    }
+
+    document.body.appendChild(video)
 
     setInterval(() => {
       faceDetector.detect(video).then(faces => alert(faces.length))
