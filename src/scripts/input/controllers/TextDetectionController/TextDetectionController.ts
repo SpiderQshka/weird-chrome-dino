@@ -36,28 +36,38 @@ export class TextDetectionController implements Controller {
     document.body.appendChild(this.canvasElement)
 
     const ctx = this.canvasElement.getContext("2d")
-    const textDetector = new (window as any).TextDetector()
+    const faceDetector = new (window as any).FaceDetector({
+      maxDetectedFaces: 1,
+    })
 
     this.interval = setInterval(async () => {
       ctx.drawImage(this.videoElement, 0, 0, this.canvasElement.width, this.canvasElement.height)
 
-      const textBlocks = await textDetector.detect(this.canvasElement)
+      const faces = await faceDetector.detect(this.canvasElement)
 
-      if (textBlocks.length === 0) {
-        this.playerState.isLeaping = false
-        this.playerState.isCrouching = false
-
-        this.onPlayerStateUpdate(this.playerState)
+      if(faces.length === 0){
+        alert("No faces detected")
 
         return
       }
 
-      const texts = textBlocks.map(text => text.rawValue.toLowerCase()) as string[]
+      alert(faces[0])
 
-      if (texts.some(word => word.includes("leap"))) this.playerState.isLeaping = true
-      if (texts.some(word => word.includes("crouch"))) this.playerState.isCrouching = true
+      // if (textBlocks.length === 0) {
+      //   this.playerState.isLeaping = false
+      //   this.playerState.isCrouching = false
 
-      this.onPlayerStateUpdate(this.playerState)
+      //   this.onPlayerStateUpdate(this.playerState)
+
+      //   return
+      // }
+
+      // const texts = textBlocks.map(text => text.rawValue.toLowerCase()) as string[]
+
+      // if (texts.some(word => word.includes("leap"))) this.playerState.isLeaping = true
+      // if (texts.some(word => word.includes("crouch"))) this.playerState.isCrouching = true
+
+      // this.onPlayerStateUpdate(this.playerState)
     }, 1000)
   }
 
