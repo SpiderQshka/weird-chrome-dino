@@ -47,17 +47,11 @@ export function initializeControllerSelect(
 export function initializePauseButton(onClick: (isPaused: boolean) => void) {
   let isPaused = INITIAL_GAME_STATE.isPaused
 
-  const handleClick = () => {
-    onClick(isPaused)
-
-    isPaused = !isPaused
-  }
-
   const pauseButton = document.createElement("button")
 
   pauseButton.innerText = "Pause / Continue"
 
-  pauseButton.addEventListener("click", handleClick)
+  pauseButton.addEventListener("click", () => onClick((isPaused = !isPaused)))
 
   document.body.appendChild(pauseButton)
 }

@@ -26,6 +26,8 @@ export class SpeechController implements Controller {
         transcripts.push(lastSpeechRecognitionResult[i].transcript.trim().toLowerCase())
       }
 
+      alert(transcripts)
+
       if (transcripts.includes("stand up")) {
         this.playerState.isCrouching = false
       }
