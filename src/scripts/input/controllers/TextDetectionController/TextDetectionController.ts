@@ -39,7 +39,14 @@ export class TextDetectionController implements Controller {
           return
         }
 
-        alert(faces[0].landmarks.map(({ type }) => type).join(", "))
+        alert(
+          faces[0].landmarks
+            .map(
+              ({ type, boundingBox: { top, left, width, height } }) =>
+                `${type}. H: ${height}, W: ${width}, T: ${top}, L: ${left}`,
+            )
+            .join(", "),
+        )
       })
     }, 5000)
   }
