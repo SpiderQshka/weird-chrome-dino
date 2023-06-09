@@ -29,25 +29,16 @@ export class TextDetectionController implements Controller {
 
     navigator.mediaDevices.getUserMedia(mediaStreamConstraints).then(stream => (this.videoElement.srcObject = stream))
 
-    const faceDetector = new (window as any).FaceDetector()
+    const faceDetector = new (window as any).FaceDetector({ maxDetectedFaces: 1, fastMode: true })
 
     setInterval(() => {
-      faceDetector.detect(this.videoElement).then(faces => {
-        if (faces.length === 0) {
-          alert("No faces")
+      faceDetector.detect(this.videoElement).then(([face]) => {
+        if (!face) return
 
-          return
-        }
+        const eyes = face.landmarks.filter(({ type }) => type === "eye")
 
-        const eye = faces[0].landmarks[0]
-
-        eye.locations.forEach(location => alert(Object.values(location).join(", ")))
-
-        // alert(
-        //   Object.entries(eye)
-        //     .map(([key, value]) => `${key}: ${value}`)
-        //     .join("; "),
-        // )
+        // if location[0] is negative - one eye is out
+        eyes[0].locations.forEach(location => alert(`${location[0]}, ${location[1]}`))
       })
     }, 5000)
   }
