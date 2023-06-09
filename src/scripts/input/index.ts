@@ -5,24 +5,22 @@ import { io, Socket } from "socket.io-client"
 
 import {
   AmbientLightController,
-  KeyboardController,
   MagnetometerController,
   MotionController,
   OrientationController,
   SpeechController,
-  TextDetectionController,
+  FaceDetectionController,
 } from "./controllers"
 import { ClientToServerEvents, ServerToClientEvents } from "@root/scripts/types"
 import { initializePauseButton, initializeControllerSelect } from "./helpers"
 
 const controllers = {
   AmbientLightController,
-  KeyboardController,
   MagnetometerController,
   MotionController,
   OrientationController,
   SpeechController,
-  TextDetectionController,
+  FaceDetectionController,
 }
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io()

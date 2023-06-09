@@ -13,3 +13,10 @@ select {
   right: 0;
   height: 100px;
 }
+
+canvas {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}

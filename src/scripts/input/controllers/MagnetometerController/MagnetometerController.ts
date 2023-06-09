@@ -38,6 +38,8 @@ export class MagnetometerController implements Controller {
     this.sensor.removeEventListener("reading", this.handleSensorRead)
 
     this.sensor.stop()
+
+    this.onPlayerStateUpdate(null)
   }
 
   onPlayerStateUpdate: (playerState: PlayerState) => void

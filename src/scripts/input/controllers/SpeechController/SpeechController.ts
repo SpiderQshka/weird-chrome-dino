@@ -62,6 +62,8 @@ export class SpeechController implements Controller {
   cleanup() {
     this.speechRecognition.removeEventListener("end", this.handleSpeechRecognitionEnd)
     this.speechRecognition.stop()
+
+    this.onPlayerStateUpdate(null)
   }
 
   onPlayerStateUpdate: (playerState: PlayerState) => void

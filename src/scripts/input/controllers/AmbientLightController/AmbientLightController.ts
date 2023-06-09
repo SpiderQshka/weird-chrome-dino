@@ -11,7 +11,7 @@ export class AmbientLightController implements Controller {
 
   constructor() {
     this.playerState = INITIAL_PLAYER_STATE
-    this.sensor = new AmbientLightSensor()
+    this.sensor = new AmbientLightSensor({ frequency: 30 })
     this.initialIlluminance = null
 
     this.handleSensorRead = () => {
@@ -19,8 +19,8 @@ export class AmbientLightController implements Controller {
 
       const deltaIlluminance = this.initialIlluminance - this.sensor.illuminance
 
-      this.playerState.isLeaping = deltaIlluminance <= -100
-      this.playerState.isCrouching = deltaIlluminance >= 100
+      this.playerState.isLeaping = deltaIlluminance <= -300
+      this.playerState.isCrouching = deltaIlluminance >= 300
 
       this.onPlayerStateUpdate(this.playerState)
     }
@@ -36,6 +36,8 @@ export class AmbientLightController implements Controller {
     this.sensor.removeEventListener("reading", this.handleSensorRead)
 
     this.sensor.stop()
+
+    this.onPlayerStateUpdate(null)
   }
 
   onPlayerStateUpdate: (playerState: PlayerState) => void

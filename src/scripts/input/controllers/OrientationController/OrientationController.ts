@@ -29,6 +29,8 @@ export class OrientationController implements Controller {
 
   cleanup() {
     window.removeEventListener("deviceorientation", this.handleDeviceOrientation)
+
+    this.onPlayerStateUpdate(null)
   }
 
   onPlayerStateUpdate: (playerState: PlayerState) => void
