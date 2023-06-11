@@ -19,8 +19,8 @@ export class AmbientLightController implements Controller {
 
       const deltaIlluminance = this.initialIlluminance - this.sensor.illuminance
 
-      this.playerState.isLeaping = deltaIlluminance <= -300
-      this.playerState.isCrouching = deltaIlluminance >= 300
+      this.playerState.isLeaping = deltaIlluminance <= -200
+      this.playerState.isCrouching = deltaIlluminance >= 200
 
       this.onPlayerStateUpdate(this.playerState)
     }
