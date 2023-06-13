@@ -1,6 +1,5 @@
 export * from "./AmbientLightController"
 export * from "./MagnetometerController"
 export * from "./MotionController"
-export * from "./OrientationController"
 export * from "./SpeechController"
 export * from "./FaceDetectionController"

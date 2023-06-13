@@ -19,25 +19,14 @@ export class SpeechController implements Controller {
     this.speechRecognition.maxAlternatives = 20
 
     this.speechRecognition.onresult = e => {
-      const lastSpeechRecognitionResult = e.results.item(e.resultIndex)
-      const transcripts = []
+      const lastSpeechRecognitionResult = Array.from(e.results.item(e.resultIndex))
 
-      for (let i = 0; i < lastSpeechRecognitionResult.length; i++) {
-        transcripts.push(lastSpeechRecognitionResult[i].transcript.trim().toLowerCase())
-      }
+      const transcripts = lastSpeechRecognitionResult.map(({ transcript }) => transcript.trim().toLowerCase())
 
-      if (transcripts.includes("stand up")) {
-        this.playerState.isCrouching = false
-      }
+      this.playerState.isLeaping = transcripts.includes("jump over")
+      this.playerState.isCrouching = transcripts.includes("get down")
 
-      if (transcripts.includes("get down")) {
-        this.playerState.isCrouching = true
-      }
-
-      if (transcripts.includes("jump over")) {
-        this.playerState.isLeaping = true
-        this.playerState.isCrouching = false
-
+      if (this.playerState.isLeaping) {
         setTimeout(() => {
           this.playerState.isLeaping = false
           this.onPlayerStateUpdate(this.playerState)

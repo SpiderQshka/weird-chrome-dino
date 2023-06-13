@@ -7,7 +7,6 @@ import {
   AmbientLightController,
   MagnetometerController,
   MotionController,
-  OrientationController,
   SpeechController,
   FaceDetectionController,
 } from "./controllers"
@@ -18,7 +17,6 @@ const controllers = {
   AmbientLightController,
   MagnetometerController,
   MotionController,
-  OrientationController,
   SpeechController,
   FaceDetectionController,
 }
