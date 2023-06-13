@@ -10,14 +10,14 @@ export class MotionController implements Controller {
 
   constructor() {
     this.playerState = INITIAL_PLAYER_STATE
+
     this.sensor = new LinearAccelerationSensor({ frequency: 60 })
 
     this.handleSensorRead = () => {
       this.playerState.isLeaping = this.sensor.x > 15
+      this.playerState.isCrouching = this.sensor.x < -10
 
-      if (this.sensor.x < -10) {
-        this.playerState.isCrouching = true
-
+      if (this.playerState.isCrouching) {
         setTimeout(() => {
           this.playerState.isCrouching = false
           this.onPlayerStateUpdate(this.playerState)

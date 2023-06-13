@@ -39,6 +39,8 @@ export class FaceDetectionController implements Controller {
 
     const faceDetector = new (window as any).FaceDetector({ maxDetectedFaces: 1, fastMode: true })
 
+    const GAP_SIZE = 125
+
     this.interval = setInterval(() => {
       faceDetector.detect(this.videoElement).then(([face]) => {
         context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height)
@@ -48,40 +50,38 @@ export class FaceDetectionController implements Controller {
         context.lineWidth = 5
 
         context.beginPath()
-        context.rect(125, 125, this.videoElement.videoWidth - 250, this.videoElement.videoHeight - 250)
+        context.rect(
+          GAP_SIZE,
+          GAP_SIZE,
+          this.videoElement.videoWidth - GAP_SIZE * 2,
+          this.videoElement.videoHeight - GAP_SIZE * 2,
+        )
         context.stroke()
         context.closePath()
-
-        if (!face) {
+        ;(() => {
           this.playerState.isLeaping = false
           this.playerState.isCrouching = true
 
-          this.onPlayerStateUpdate(this.playerState)
+          if (!face) return
 
-          return
-        }
+          const eyes = face.landmarks.filter(({ type }) => type === "eye")
 
-        const eyes = face.landmarks.filter(({ type }) => type === "eye")
+          const visibleEyes = eyes.filter(eye => {
+            const [{ x }] = eye.locations
 
-        const visibleEyes = eyes.filter(eye => {
-          const [{ x }] = eye.locations
+            return x > GAP_SIZE && x < this.videoElement.videoWidth - GAP_SIZE
+          })
 
-          return x > 125 && x < this.videoElement.videoWidth - 125
-        })
+          if (visibleEyes.length === 0) return
 
-        if (visibleEyes.length === 0) return
-
-        if (visibleEyes.length === 1) {
           this.playerState.isLeaping = false
           this.playerState.isCrouching = false
 
-          this.onPlayerStateUpdate(this.playerState)
+          if (visibleEyes.length === 1) return
 
-          return
-        }
-
-        this.playerState.isLeaping = true
-        this.playerState.isCrouching = false
+          this.playerState.isLeaping = true
+          this.playerState.isCrouching = false
+        })()
 
         this.onPlayerStateUpdate(this.playerState)
       })
