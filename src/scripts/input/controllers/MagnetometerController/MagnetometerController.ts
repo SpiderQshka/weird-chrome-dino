@@ -18,7 +18,7 @@ export class MagnetometerController implements Controller {
     this.initialSensorState = null
 
     this.handleSensorRead = () => {
-      if (this.sensor.y < -200 || this.sensor.y > 200) return
+      if (this.sensor.y < -150 || this.sensor.y > 150) return
 
       if (!this.initialSensorState) this.initialSensorState = { x: this.sensor.x, y: this.sensor.y, z: this.sensor.z }
 

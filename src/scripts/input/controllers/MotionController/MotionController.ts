@@ -17,8 +17,8 @@ export class MotionController implements Controller {
       this.playerState.isLeaping = this.sensor.x > 15
 
       if (this.sensor.x < -10) {
-        this.playerState.isCrouching = this.sensor.x < -10
-        
+        this.playerState.isCrouching = true
+
         setTimeout(() => {
           this.playerState.isCrouching = false
           this.onPlayerStateUpdate(this.playerState)

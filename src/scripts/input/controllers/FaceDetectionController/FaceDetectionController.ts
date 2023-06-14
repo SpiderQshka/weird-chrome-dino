@@ -7,7 +7,10 @@ export class FaceDetectionController implements Controller {
 
   videoElement: HTMLVideoElement
   canvasElement: HTMLCanvasElement
-  interval: ReturnType<typeof setInterval>
+
+  handlePhoto: () => void
+
+  animationFrame: number
 
   constructor() {
     this.playerState = INITIAL_PLAYER_STATE
@@ -39,25 +42,8 @@ export class FaceDetectionController implements Controller {
 
     const faceDetector = new (window as any).FaceDetector({ maxDetectedFaces: 1, fastMode: true })
 
-    const GAP_SIZE = 125
-
-    this.interval = setInterval(() => {
+    this.handlePhoto = () => {
       faceDetector.detect(this.videoElement).then(([face]) => {
-        context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height)
-        context.drawImage(this.videoElement, 0, 0, this.videoElement.videoWidth, this.videoElement.videoHeight)
-
-        context.strokeStyle = "#FFFF00"
-        context.lineWidth = 5
-
-        context.beginPath()
-        context.rect(
-          GAP_SIZE,
-          GAP_SIZE,
-          this.videoElement.videoWidth - GAP_SIZE * 2,
-          this.videoElement.videoHeight - GAP_SIZE * 2,
-        )
-        context.stroke()
-        context.closePath()
         ;(() => {
           this.playerState.isLeaping = false
           this.playerState.isCrouching = true
@@ -72,29 +58,58 @@ export class FaceDetectionController implements Controller {
             return x > GAP_SIZE && x < this.videoElement.videoWidth - GAP_SIZE
           })
 
-          if (visibleEyes.length === 0) return
-
-          this.playerState.isLeaping = false
-          this.playerState.isCrouching = false
-
-          if (visibleEyes.length === 1) return
+          if (visibleEyes.length !== 2) return
 
           this.playerState.isLeaping = true
           this.playerState.isCrouching = false
         })()
 
+        setTimeout(() => {
+          if (this.playerState.isLeaping) this.playerState.isLeaping = false
+          if (this.playerState.isCrouching) this.playerState.isCrouching = false
+          this.onPlayerStateUpdate(this.playerState)
+        }, 1000)
+
+        this.onPhoto(this.canvasElement.toDataURL("image/jpeg", 0.1))
         this.onPlayerStateUpdate(this.playerState)
       })
-    }, 50)
+    }
+
+    this.canvasElement.addEventListener("click", this.handlePhoto)
+
+    const GAP_SIZE = 150
+
+    const render = () => {
+      context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height)
+      context.drawImage(this.videoElement, 0, 0, this.videoElement.videoWidth, this.videoElement.videoHeight)
+
+      context.strokeStyle = "#FFFF00"
+      context.lineWidth = 5
+
+      context.beginPath()
+      context.rect(
+        GAP_SIZE,
+        GAP_SIZE,
+        this.videoElement.videoWidth - GAP_SIZE * 2,
+        this.videoElement.videoHeight - GAP_SIZE * 2,
+      )
+      context.stroke()
+      context.closePath()
+
+      this.animationFrame = requestAnimationFrame(render)
+    }
+
+    this.animationFrame = requestAnimationFrame(render)
   }
 
   cleanup() {
     document.body.removeChild(this.canvasElement)
 
-    clearInterval(this.interval)
+    cancelAnimationFrame(this.animationFrame)
 
     this.onPlayerStateUpdate(null)
   }
 
   onPlayerStateUpdate: (playerState: PlayerState) => void
+  onPhoto: (base64: string) => void
 }

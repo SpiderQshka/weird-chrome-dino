@@ -5,4 +5,5 @@ export interface Controller {
   onPlayerStateUpdate: (playerState: PlayerState) => void
   initialize: () => void
   cleanup: () => void
+  onPhoto?: (base64: string) => void
 }

@@ -5,6 +5,7 @@ import { Controller } from "./controllers/types"
 export function initializeControllerSelect(
   controllers: { [key: string]: new () => Controller },
   onPlayerStateUpdate: (playerState: PlayerState) => void,
+  onPhoto: (base64: string) => void,
 ) {
   const select = document.createElement("select")
 
@@ -39,6 +40,7 @@ export function initializeControllerSelect(
 
     controller.initialize()
     controller.onPlayerStateUpdate = onPlayerStateUpdate
+    controller.onPhoto = onPhoto
   }
 
   document.body.appendChild(select)

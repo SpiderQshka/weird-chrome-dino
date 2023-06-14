@@ -1,7 +1,7 @@
 import { Score } from "./Score"
 import { Obstacle } from "./Obstacle"
 import { Player } from "./Player"
-import { GAME_SPEED, GAME_SPEED_FACTOR, INITIAL_SPAWN_TIMER, MIN_SPAWN_TIMER } from "../gameConfig"
+import { GAME_SPEED, INITIAL_SPAWN_TIMER } from "../gameConfig"
 import { GameState, PlayerState } from "@root/scripts/types"
 import { INITIAL_GAME_STATE } from "@root/scripts/constants"
 
@@ -87,9 +87,7 @@ export class Game {
 
       this.obstacles.push(obstacle)
 
-      this.spawnTimer = INITIAL_SPAWN_TIMER - this.gameSpeed * GAME_SPEED_FACTOR
-
-      if (this.spawnTimer < MIN_SPAWN_TIMER) this.spawnTimer = MIN_SPAWN_TIMER
+      this.spawnTimer = INITIAL_SPAWN_TIMER
     }
 
     // Remove out-of-bounds obstacles

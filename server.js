@@ -26,10 +26,12 @@ const io = new Server(httpServer)
 io.on("connection", socket => {
   socket.on("playerState:update", state => socket.broadcast.emit("playerState:updated", state))
   socket.on("gameState:update", state => socket.broadcast.emit("gameState:updated", state))
+  socket.on("photo:update", state => socket.broadcast.emit("photo:updated", state))
 
   socket.on("disconnecting", () => {
     socket.broadcast.emit("playerState:updated", null)
     socket.broadcast.emit("gameState:updated", null)
+    socket.broadcast.emit("photo:updated", null)
   })
 })
 
