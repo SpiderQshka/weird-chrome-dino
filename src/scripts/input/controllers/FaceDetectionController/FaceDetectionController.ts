@@ -70,7 +70,7 @@ export class FaceDetectionController implements Controller {
             if (this.playerState.isCrouching) this.playerState.isCrouching = false
             this.onPlayerStateUpdate(this.playerState)
           },
-          this.playerState.isLeaping ? 1000 : 500,
+          this.playerState.isLeaping ? 500 : 1000,
         )
 
         this.onPhoto(this.canvasElement.toDataURL("image/jpeg", 0.1))
