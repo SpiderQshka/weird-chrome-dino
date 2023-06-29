@@ -13,7 +13,7 @@ export class MagnetometerController implements Controller {
   constructor() {
     this.playerState = INITIAL_PLAYER_STATE
 
-    this.sensor = new Magnetometer({ frequency: 30 })
+    this.sensor = new Magnetometer({ frequency: 60 })
 
     this.initialSensorState = null
 

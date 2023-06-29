@@ -12,7 +12,7 @@ export class AmbientLightController implements Controller {
   constructor() {
     this.playerState = INITIAL_PLAYER_STATE
 
-    this.sensor = new AmbientLightSensor({ frequency: 30 })
+    this.sensor = new AmbientLightSensor({ frequency: 60 })
 
     this.initialIlluminance = null
 

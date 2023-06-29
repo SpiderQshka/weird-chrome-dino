@@ -1,6 +1,7 @@
 import { PlayerState } from "@root/scripts/types"
 import { INITIAL_PLAYER_STATE } from "@root/scripts/constants"
 import { Controller } from "../types"
+// import {FaceDetector} from "./types"
 
 export class FaceDetectionController implements Controller {
   playerState: PlayerState
@@ -64,14 +65,11 @@ export class FaceDetectionController implements Controller {
           this.playerState.isCrouching = false
         })()
 
-        setTimeout(
-          () => {
-            if (this.playerState.isLeaping) this.playerState.isLeaping = false
-            if (this.playerState.isCrouching) this.playerState.isCrouching = false
-            this.onPlayerStateUpdate(this.playerState)
-          },
-          this.playerState.isLeaping ? 500 : 1000,
-        )
+        setTimeout(() => {
+          if (this.playerState.isLeaping) this.playerState.isLeaping = false
+          if (this.playerState.isCrouching) this.playerState.isCrouching = false
+          this.onPlayerStateUpdate(this.playerState)
+        }, 1000)
 
         this.onPhoto(this.canvasElement.toDataURL("image/jpeg", 0.1))
         this.onPlayerStateUpdate(this.playerState)
@@ -86,7 +84,7 @@ export class FaceDetectionController implements Controller {
       context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height)
       context.drawImage(this.videoElement, 0, 0, this.videoElement.videoWidth, this.videoElement.videoHeight)
 
-      context.strokeStyle = "#FFFF00"
+      context.strokeStyle = "white"
       context.lineWidth = 5
 
       context.beginPath()
@@ -109,8 +107,10 @@ export class FaceDetectionController implements Controller {
     document.body.removeChild(this.canvasElement)
 
     cancelAnimationFrame(this.animationFrame)
+    ;(this.videoElement.srcObject as MediaStream).getTracks().forEach(track => track.stop())
 
     this.onPlayerStateUpdate(null)
+    this.onPhoto(null)
   }
 
   onPlayerStateUpdate: (playerState: PlayerState) => void
