@@ -1,7 +1,6 @@
 import { PlayerState } from "@root/scripts/types"
 import { INITIAL_PLAYER_STATE } from "@root/scripts/constants"
 import { Controller } from "../types"
-// import {FaceDetector} from "./types"
 
 export class FaceDetectionController implements Controller {
   playerState: PlayerState

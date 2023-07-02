@@ -64,13 +64,15 @@ export class Game {
     this.main()
   }
 
+  pattern = [false, false, true]
+
   update() {
     this.spawnTimer--
 
     // Spawn obstacle when it's time to
     if (this.spawnTimer <= 0) {
       const size = { width: 50, height: 50 }
-      const isFlying = Math.random() < 0.5
+      const isFlying = this.pattern[Math.round(Math.random() * this.pattern.length)]
 
       const position = {
         x: this.canvas.width - size.width,
